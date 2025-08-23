@@ -63,12 +63,10 @@ export const improveTaskDescription = async (
     const openai = getOpenAIClient();
 
     const prompt = currentDescription
-      ? `Melhore esta tarefa:
-         Título: "${task}"
-         Descrição atual: "${currentDescription}"
+      ? `Descrição atual: "${currentDescription}"
          
-         Crie uma versão melhorada e mais detalhada da descrição.`
-      : `Crie uma descrição detalhada para esta tarefa: "${task}"`;
+         Melhore e detalhe mais esta descrição, mantendo o foco no conteúdo sem repetir o título da tarefa.`
+      : `Crie uma descrição detalhada e útil para a atividade mencionada. Não repita o título, apenas elabore sobre como executar, passos necessários e dicas relevantes.`;
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
@@ -77,17 +75,19 @@ export const improveTaskDescription = async (
           role: "system",
           content: `Você é um assistente especializado em organização e produtividade. 
           Quando receber informações sobre uma tarefa, você deve:
-          1. Criar ou melhorar a descrição de forma detalhada e útil
-          2. Sugerir subtarefas ou passos específicos para completá-la
-          3. Dar dicas práticas se relevante
-          4. Manter um tom profissional mas acessível
+          1. Criar ou melhorar a descrição focando APENAS no conteúdo e execução
+          2. NÃO repita ou mencione o título da tarefa na descrição
+          3. Sugira subtarefas ou passos específicos para completá-la
+          4. Dê dicas práticas e detalhes relevantes
+          5. Mantenha um tom profissional mas acessível
           
+          IMPORTANTE: Vá direto ao ponto sobre COMO fazer, não SOBRE O QUE é a tarefa.
           Responda em português brasileiro, seja conciso mas informativo (máximo 300 palavras).
-          Formate a resposta de forma clara e organizada.`,
+          Use markdown para formatar a resposta de forma clara e organizada.`,
         },
         {
           role: "user",
-          content: prompt,
+          content: `Tarefa: "${task}"\n\n${prompt}`,
         },
       ],
       max_tokens: 500,

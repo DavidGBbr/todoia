@@ -244,43 +244,59 @@ Abra [http://localhost:3000](http://localhost:3000) no navegador.
 ## 🤖 Exemplos de Enriquecimento com IA
 
 ### **Entrada do Usuário:**
-
 ```
 Título: "Estudar React"
 Descrição atual: "Revisar conceitos básicos"
 ```
 
-### **Depois de clicar em "🤖 Melhorar com IA":**
+### **Depois de clicar em "🤖 Melhorar com IA" (com suporte a Markdown):**
 
-```
-**Objetivo:** Aprofundar conhecimentos em React para desenvolvimento web moderno, partindo da revisão de conceitos fundamentais.
+```markdown
+## Objetivo
+Aprofundar conhecimentos em **React** para desenvolvimento web moderno, partindo da revisão de conceitos fundamentais.
 
-**Plano de estudo estruturado:**
+### Plano de estudo estruturado:
 
-**1. Conceitos Básicos (Revisão)**
+#### 1. Conceitos Básicos (Revisão)
 - Components funcionais e de classe
-- Props e PropTypes
+- Props e PropTypes  
 - State management básico
 - Event handling
 
-**2. Hooks Essenciais**
-- useState para gerenciamento de estado
-- useEffect para efeitos colaterais
-- useContext para compartilhamento de dados
+#### 2. Hooks Essenciais
+- `useState` para gerenciamento de estado
+- `useEffect` para efeitos colaterais
+- `useContext` para compartilhamento de dados
 - Custom hooks para lógica reutilizável
 
-**3. Prática Aplicada**
-- Criar um projeto todo-list simples
-- Implementar CRUD operations
-- Adicionar validação de formulários
+#### 3. Prática Aplicada
+1. Criar um projeto todo-list simples
+2. Implementar CRUD operations
+3. Adicionar validação de formulários
+
+> **Dica**: Pratique codificando junto com tutoriais para fixar melhor o aprendizado.
 
 **Recursos recomendados:**
-- Documentação oficial do React
+- [Documentação oficial do React](https://react.dev)
 - React Developer Tools
 - Projetos práticos no CodeSandbox
 
 **Tempo estimado:** 2-3 semanas (1-2h/dia)
 ```
+
+### **Funcionalidades de Markdown Suportadas:**
+- ✅ **Títulos** (`#`, `##`, `###`)
+- ✅ **Texto em negrito** (`**texto**`)
+- ✅ **Texto em itálico** (`*texto*`)  
+- ✅ **Listas ordenadas** (`1. item`)
+- ✅ **Listas não ordenadas** (`- item`)
+- ✅ **Código inline** (`código`)
+- ✅ **Blocos de código** (```código```)
+- ✅ **Citações** (`> texto`)
+- ✅ **Links** (`[texto](url)`)
+- ✅ **Tabelas** (GitHub Flavored Markdown)
+
+## 📝 Scripts Disponíveis
 
 ## � Scripts Disponíveis
 

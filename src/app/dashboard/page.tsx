@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
   createTodo,
   improveTaskDescription,
@@ -9,6 +11,39 @@ import {
   toggleTodoComplete,
   getTodos,
 } from "./action";
+
+const MarkdownDescription = ({
+  content,
+  isCompleted,
+  isExpanded,
+  maxLength = 150,
+}: {
+  content: string;
+  isCompleted: boolean;
+  isExpanded: boolean;
+  maxLength?: number;
+}) => {
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + "...";
+  };
+
+  const displayContent = isExpanded
+    ? content
+    : truncateText(content, maxLength);
+
+  return (
+    <div
+      className={`max-w-none text-sm leading-relaxed markdown-content ${
+        isCompleted ? "text-gray-400" : "text-gray-600"
+      }`}
+    >
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        {displayContent}
+      </ReactMarkdown>
+    </div>
+  );
+};
 
 interface Todo {
   id: number;
@@ -48,11 +83,6 @@ const DashboardPage = () => {
       newExpanded.add(todoId);
     }
     setExpandedTodos(newExpanded);
-  };
-
-  const truncateText = (text: string, maxLength: number) => {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + "...";
   };
 
   const fetchTodos = async () => {
@@ -435,17 +465,12 @@ const DashboardPage = () => {
 
                           {todo.description && (
                             <div className="mt-2">
-                              <p
-                                className={`text-sm leading-relaxed ${
-                                  todo.is_complete
-                                    ? "text-gray-400"
-                                    : "text-gray-600"
-                                }`}
-                              >
-                                {expandedTodos.has(todo.id)
-                                  ? todo.description
-                                  : truncateText(todo.description, 150)}
-                              </p>
+                              <MarkdownDescription
+                                content={todo.description}
+                                isCompleted={todo.is_complete}
+                                isExpanded={expandedTodos.has(todo.id)}
+                                maxLength={150}
+                              />
 
                               {todo.description.length > 150 && (
                                 <button
