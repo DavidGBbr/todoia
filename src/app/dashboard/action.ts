@@ -4,14 +4,12 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import OpenAI from "openai";
 
-// Tipos para o enriquecimento da IA
 interface ImproveDescriptionResult {
   description: string;
   success: boolean;
   error?: string;
 }
 
-// Configuração do cliente OpenAI
 const getOpenAIClient = () => {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
@@ -57,7 +55,6 @@ export const createTodo = async (formData: FormData) => {
   return { success: true };
 };
 
-// Função para melhorar a descrição de uma tarefa com IA
 export const improveTaskDescription = async (
   task: string,
   currentDescription?: string
