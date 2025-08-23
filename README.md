@@ -12,6 +12,7 @@ Uma aplicação moderna de gerenciamento de tarefas construída com Next.js 15, 
 - ✅ **Segurança avançada** com Row Level Security (RLS)
 - ✅ **Performance otimizada** com Next.js 15 e App Router
 - ✅ **Experiência do usuário** intuitiva com estados de loading
+- 🤖 **Enriquecimento automático com IA** usando OpenAI GPT-4
 
 ## 🛠️ Stack Tecnológica
 
@@ -28,6 +29,11 @@ Uma aplicação moderna de gerenciamento de tarefas construída com Next.js 15, 
 - **PostgreSQL** - Banco de dados relacional
 - **Supabase Auth** - Sistema de autenticação
 - **Row Level Security (RLS)** - Segurança em nível de linha
+
+### **Inteligência Artificial**
+
+- **[OpenAI API](https://openai.com/)** - GPT-4 para enriquecimento automático
+- **Server Actions** - Processamento assíncrono no servidor
 
 ### **Ferramentas de Desenvolvimento**
 
@@ -84,6 +90,14 @@ todo-ia/
 - **Deletar**: Remover tarefas com confirmação
 - **Alternar Status**: Marcar como concluída/pendente
 
+### **🤖 Enriquecimento com IA**
+
+- **Botão de melhoria**: Botão "🤖 Melhorar com IA" nos formulários de criação e edição
+- **Descrição inteligente**: A IA analisa o título e descrição atual para criar uma versão melhorada
+- **Controle manual**: Usuário decide quando usar a IA clicando no botão específico
+- **Feedback visual**: Estados de carregamento indicam quando a IA está processando
+- **Pré-visualização**: Usuário vê a descrição gerada antes de salvar a tarefa
+
 ### **📊 Dashboard Inteligente**
 
 - Estatísticas em tempo real
@@ -106,6 +120,7 @@ todo-ia/
 - Node.js 18+
 - npm, yarn, pnpm ou bun
 - Conta no Supabase
+- Chave da API OpenAI (para funcionalidade de IA)
 
 ### **1. Clone o repositório**
 
@@ -131,9 +146,15 @@ bun install
 Crie um arquivo `.env.local` na raiz do projeto:
 
 ```env
+# Supabase
 NEXT_PUBLIC_SUPABASE_URL=https://sua-url.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sua-chave-publica
+
+# OpenAI (para enriquecimento com IA)
+OPENAI_API_KEY=sua-chave-da-openai
 ```
+
+> **Nota**: A funcionalidade de IA é opcional. Se a chave da OpenAI não estiver configurada, o sistema funcionará normalmente sem o enriquecimento automático.
 
 ### **4. Configure o banco de dados Supabase**
 
@@ -188,19 +209,80 @@ Abra [http://localhost:3000](http://localhost:3000) no navegador.
 
 ### **2. Gerenciar Tarefas**
 
-- **Criar**: Preencha o formulário e clique em "Adicionar Tarefa"
+- **Criar**:
+  1. Preencha o título da tarefa
+  2. Opcionalmente, digite uma descrição inicial
+  3. Clique em "🤖 Melhorar com IA" para enriquecer a descrição
+  4. Revise a descrição gerada
+  5. Clique em "Adicionar Tarefa" para salvar
 - **Filtrar**: Use os botões "Todas", "Pendentes", "Concluídas"
-- **Editar**: Clique no ícone ✏️ da tarefa
+- **Editar**:
+  1. Clique no ícone ✏️ da tarefa
+  2. Modifique título ou descrição
+  3. Use "🤖 Melhorar com IA" para aprimorar
+  4. Clique em "💾 Salvar" para confirmar
 - **Completar**: Clique no círculo ao lado da tarefa
 - **Deletar**: Clique no ícone 🗑️ (com confirmação)
+
+### **3. Enriquecimento com IA**
+
+- **Ativação manual**: Clique no botão "🤖 Melhorar com IA"
+- **Disponível em**: Formulário de criação e modo de edição
+- **Processo**:
+  1. IA analisa título e descrição atual
+  2. Gera versão melhorada e mais detalhada
+  3. Usuário revisa antes de salvar
+- **Requisitos**: Título obrigatório para usar a IA
 
 ### **3. Dashboard**
 
 - Visualize estatísticas em tempo real
 - Acompanhe progresso das tarefas
 - Interface otimizada para produtividade
+- Descrições enriquecidas pela IA para melhor contexto
 
-## 🚀 Scripts Disponíveis
+## 🤖 Exemplos de Enriquecimento com IA
+
+### **Entrada do Usuário:**
+
+```
+Título: "Estudar React"
+Descrição atual: "Revisar conceitos básicos"
+```
+
+### **Depois de clicar em "🤖 Melhorar com IA":**
+
+```
+**Objetivo:** Aprofundar conhecimentos em React para desenvolvimento web moderno, partindo da revisão de conceitos fundamentais.
+
+**Plano de estudo estruturado:**
+
+**1. Conceitos Básicos (Revisão)**
+- Components funcionais e de classe
+- Props e PropTypes
+- State management básico
+- Event handling
+
+**2. Hooks Essenciais**
+- useState para gerenciamento de estado
+- useEffect para efeitos colaterais
+- useContext para compartilhamento de dados
+- Custom hooks para lógica reutilizável
+
+**3. Prática Aplicada**
+- Criar um projeto todo-list simples
+- Implementar CRUD operations
+- Adicionar validação de formulários
+
+**Recursos recomendados:**
+- Documentação oficial do React
+- React Developer Tools
+- Projetos práticos no CodeSandbox
+
+**Tempo estimado:** 2-3 semanas (1-2h/dia)
+```
+
+## � Scripts Disponíveis
 
 ```bash
 # Desenvolvimento
@@ -231,6 +313,40 @@ npm run lint
 - Render
 - AWS Amplify
 
+## 🔧 Troubleshooting
+
+### **Problema: IA não está funcionando**
+
+1. **Verifique a chave da API:**
+
+   ```bash
+   # No arquivo .env.local
+   OPENAI_API_KEY=sk-proj-...
+   ```
+
+2. **Verifique os logs do servidor:**
+
+   - Abra o terminal de desenvolvimento
+   - Procure por erros relacionados à OpenAI
+
+3. **Teste a conectividade:**
+   - Verifique se a chave tem créditos disponíveis
+   - Confirme que a chave tem permissões para o modelo GPT-4o-mini
+
+### **Problema: Descrições não aparecem**
+
+- A IA processa em background, aguarde alguns segundos
+- Recarregue a página se necessário
+- Verifique o console do navegador para erros
+
+### **Fallback sem IA**
+
+Se a IA não estiver disponível:
+
+- Use o toggle para desabilitar
+- Sistema funcionará normalmente sem enriquecimento
+- Descrições manuais continuam funcionando
+
 ## 🤝 Contribuição
 
 1. Fork o projeto
@@ -259,6 +375,7 @@ npm run lint
 - Todas as operações CRUD executam no servidor
 - Segurança e performance otimizadas
 - Revalidação automática de cache
+- Processamento assíncrono de IA em background
 
 ### **Middleware de Autenticação**
 
@@ -271,6 +388,14 @@ npm run lint
 - Interface modular e escalável
 - TypeScript para tipagem segura
 - Tailwind para estilização consistente
+- Integração inteligente com IA
+
+### **Inteligência Artificial**
+
+- **OpenAI GPT-4o-mini**: Modelo otimizado para velocidade e custo
+- **Prompt Engineering**: Sistema otimizado para gerar descrições úteis
+- **Processamento Assíncrono**: Não bloqueia a interface do usuário
+- **Fallback Gracioso**: Sistema funciona mesmo sem IA configurada
 
 ## 📞 Suporte
 

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import {
   createTodo,
+  improveTaskDescription,
   updateTodo,
   deleteTodo,
   toggleTodoComplete,
@@ -24,6 +25,12 @@ const DashboardPage = () => {
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
   const [filter, setFilter] = useState<"all" | "completed" | "pending">("all");
   const [isCreating, setIsCreating] = useState(false);
+
+  const [newTask, setNewTask] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+  const [isImprovingNew, setIsImprovingNew] = useState(false);
+
+  const [isImprovingEdit, setIsImprovingEdit] = useState(false);
 
   const getFilterMessage = (filterType: "completed" | "pending") => {
     return `Nenhuma tarefa ${
@@ -50,11 +57,64 @@ const DashboardPage = () => {
     if (result?.success) {
       await fetchTodos();
       (e.target as HTMLFormElement).reset();
+      setNewTask("");
+      setNewDescription("");
     } else if (result?.error) {
       alert(result.error);
     }
 
     setIsCreating(false);
+  };
+
+  const handleImproveNewTask = async () => {
+    if (!newTask.trim()) {
+      alert("Digite um título para a tarefa primeiro");
+      return;
+    }
+
+    setIsImprovingNew(true);
+    try {
+      const result = await improveTaskDescription(newTask, newDescription);
+      if (result.success) {
+        setNewDescription(result.description);
+      } else {
+        alert(
+          "Erro ao melhorar descrição: " + (result.error || "Erro desconhecido")
+        );
+      }
+    } catch (error) {
+      console.error("Erro ao melhorar descrição:", error);
+      alert("Erro ao melhorar descrição");
+    }
+    setIsImprovingNew(false);
+  };
+
+  const handleImproveEdit = async () => {
+    if (!editingTodo?.task.trim()) {
+      return;
+    }
+
+    setIsImprovingEdit(true);
+    try {
+      const result = await improveTaskDescription(
+        editingTodo.task,
+        editingTodo.description
+      );
+      if (result.success) {
+        setEditingTodo({
+          ...editingTodo,
+          description: result.description,
+        });
+      } else {
+        alert(
+          "Erro ao melhorar descrição: " + (result.error || "Erro desconhecido")
+        );
+      }
+    } catch (error) {
+      console.error("Erro ao melhorar descrição:", error);
+      alert("Erro ao melhorar descrição");
+    }
+    setIsImprovingEdit(false);
   };
 
   const handleUpdateTodo = async (
@@ -139,22 +199,44 @@ const DashboardPage = () => {
               <input
                 type="text"
                 name="task"
+                value={newTask}
+                onChange={(e) => setNewTask(e.target.value)}
                 placeholder="Título da tarefa..."
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
                 required
               />
             </div>
-            <div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-700">
+                  Descrição (opcional)
+                </span>
+                <button
+                  type="button"
+                  onClick={handleImproveNewTask}
+                  disabled={!newTask.trim() || isImprovingNew}
+                  className="flex items-center space-x-1 px-3 py-1 text-sm bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-md hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  <span>🤖</span>
+                  <span>
+                    {isImprovingNew ? "Melhorando..." : "Melhorar com IA"}
+                  </span>
+                </button>
+              </div>
               <textarea
                 name="description"
-                placeholder="Descrição (opcional)..."
+                value={newDescription}
+                onChange={(e) => setNewDescription(e.target.value)}
+                placeholder="Digite uma descrição ou use o botão 'Melhorar com IA' para gerar automaticamente..."
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 resize-none"
-                rows={3}
+                rows={4}
               />
             </div>
+
             <button
               type="submit"
-              disabled={isCreating}
+              disabled={isCreating || !newTask.trim()}
               className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-200 font-medium disabled:opacity-50"
             >
               {isCreating ? "Adicionando..." : "Adicionar Tarefa"}
@@ -216,17 +298,40 @@ const DashboardPage = () => {
                       }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-gray-900"
                     />
-                    <textarea
-                      value={editingTodo.description || ""}
-                      onChange={(e) =>
-                        setEditingTodo({
-                          ...editingTodo,
-                          description: e.target.value,
-                        })
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-gray-900 resize-none"
-                      rows={2}
-                    />
+
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-gray-700">
+                          Descrição
+                        </span>
+                        <button
+                          type="button"
+                          onClick={handleImproveEdit}
+                          disabled={!editingTodo.task.trim() || isImprovingEdit}
+                          className="flex items-center space-x-1 px-3 py-1 text-sm bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-md hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                        >
+                          <span>🤖</span>
+                          <span>
+                            {isImprovingEdit
+                              ? "Melhorando..."
+                              : "Melhorar com IA"}
+                          </span>
+                        </button>
+                      </div>
+                      <textarea
+                        value={editingTodo.description || ""}
+                        onChange={(e) =>
+                          setEditingTodo({
+                            ...editingTodo,
+                            description: e.target.value,
+                          })
+                        }
+                        placeholder="Digite uma descrição ou use o botão 'Melhorar com IA'..."
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-gray-900 resize-none"
+                        rows={3}
+                      />
+                    </div>
+
                     <div className="flex space-x-2">
                       <button
                         onClick={handleSaveEdit}
