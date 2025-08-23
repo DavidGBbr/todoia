@@ -1,36 +1,284 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📋 Todo-IA - Lista de Tarefas Inteligente
 
-## Getting Started
+Uma aplicação moderna de gerenciamento de tarefas construída com Next.js 15, Supabase e TypeScript. Interface elegante, autenticação segura e operações CRUD completas.
 
-First, run the development server:
+## 🚀 Visão Geral
+
+**Todo-IA** é uma aplicação web full-stack para gerenciamento de tarefas pessoais que oferece:
+
+- ✅ **Sistema de autenticação** completo com Supabase Auth
+- ✅ **CRUD completo** de tarefas com Server Actions
+- ✅ **Interface moderna** e responsiva com Tailwind CSS
+- ✅ **Segurança avançada** com Row Level Security (RLS)
+- ✅ **Performance otimizada** com Next.js 15 e App Router
+- ✅ **Experiência do usuário** intuitiva com estados de loading
+
+## 🛠️ Stack Tecnológica
+
+### **Frontend**
+
+- **[Next.js 15](https://nextjs.org/)** - Framework React com App Router
+- **[React 19](https://react.dev/)** - Biblioteca de interface do usuário
+- **[TypeScript 5](https://www.typescriptlang.org/)** - Tipagem estática
+- **[Tailwind CSS 4](https://tailwindcss.com/)** - Framework de estilização
+
+### **Backend & Banco de Dados**
+
+- **[Supabase](https://supabase.com/)** - Backend como serviço (BaaS)
+- **PostgreSQL** - Banco de dados relacional
+- **Supabase Auth** - Sistema de autenticação
+- **Row Level Security (RLS)** - Segurança em nível de linha
+
+### **Ferramentas de Desenvolvimento**
+
+- **ESLint** - Linter para qualidade de código
+- **PostCSS** - Processador de CSS
+- **Geist Font** - Fonte otimizada da Vercel
+
+## 📁 Estrutura do Projeto
+
+```
+todo-ia/
+├── src/
+│   ├── app/
+│   │   ├── dashboard/
+│   │   │   ├── action.ts          # Server Actions para CRUD
+│   │   │   ├── layout.tsx         # Layout do dashboard
+│   │   │   └── page.tsx           # Página principal do dashboard
+│   │   ├── login/
+│   │   │   ├── action.ts          # Server Action de autenticação
+│   │   │   ├── layout.tsx         # Layout da página de login
+│   │   │   └── page.tsx           # Página de login
+│   │   ├── layout.tsx             # Layout raiz da aplicação
+│   │   ├── page.tsx               # Página inicial
+│   │   ├── globals.css            # Estilos globais
+│   │   └── favicon.ico            # Ícone da aplicação
+│   ├── utils/
+│   │   └── supabase/
+│   │       ├── client.ts          # Cliente Supabase (browser)
+│   │       ├── server.ts          # Cliente Supabase (servidor)
+│   │       └── middleware.ts      # Middleware de autenticação
+│   └── middleware.ts              # Middleware global do Next.js
+├── public/                        # Arquivos estáticos
+├── package.json                   # Dependências e scripts
+├── tsconfig.json                  # Configuração TypeScript
+├── tailwind.config.js             # Configuração Tailwind CSS
+├── next.config.ts                 # Configuração Next.js
+└── README.md                      # Documentação do projeto
+```
+
+## 🎯 Funcionalidades
+
+### **🔐 Autenticação**
+
+- Login seguro com email e senha
+- Sessões persistentes com cookies httpOnly
+- Redirecionamento automático baseado no estado de autenticação
+- Middleware de proteção de rotas
+
+### **📝 Gerenciamento de Tarefas**
+
+- **Criar**: Adicionar novas tarefas com título e descrição
+- **Visualizar**: Lista organizada com filtros (todas, pendentes, concluídas)
+- **Editar**: Modificar tarefas existentes inline
+- **Deletar**: Remover tarefas com confirmação
+- **Alternar Status**: Marcar como concluída/pendente
+
+### **📊 Dashboard Inteligente**
+
+- Estatísticas em tempo real
+- Filtros visuais por status
+- Interface responsiva (mobile-first)
+- Estados de loading e feedback visual
+- Design moderno com micro-interações
+
+### **🔒 Segurança**
+
+- Row Level Security (RLS) no Supabase
+- Verificação de autenticação em todas as operações
+- Proteção CSRF com Server Actions
+- Validação de dados no servidor
+
+## ⚙️ Configuração do Ambiente
+
+### **Pré-requisitos**
+
+- Node.js 18+
+- npm, yarn, pnpm ou bun
+- Conta no Supabase
+
+### **1. Clone o repositório**
+
+```bash
+git clone <url-do-repositorio>
+cd todo-ia
+```
+
+### **2. Instale as dependências**
+
+```bash
+npm install
+# ou
+yarn install
+# ou
+pnpm install
+# ou
+bun install
+```
+
+### **3. Configure as variáveis de ambiente**
+
+Crie um arquivo `.env.local` na raiz do projeto:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://sua-url.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sua-chave-publica
+```
+
+### **4. Configure o banco de dados Supabase**
+
+Execute o seguinte SQL no editor SQL do Supabase:
+
+```sql
+-- Criar tabela todos
+CREATE TABLE todos (
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  task TEXT NOT NULL,
+  description TEXT,
+  is_complete BOOLEAN DEFAULT FALSE,
+  inserted_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Habilitar RLS
+ALTER TABLE todos ENABLE ROW LEVEL SECURITY;
+
+-- Política para usuários autenticados
+CREATE POLICY "Usuários podem gerenciar suas próprias tarefas"
+ON todos
+FOR ALL
+USING (auth.uid() = user_id);
+
+-- Índices para performance
+CREATE INDEX idx_todos_user_id ON todos(user_id);
+CREATE INDEX idx_todos_inserted_at ON todos(inserted_at DESC);
+```
+
+### **5. Execute o projeto**
 
 ```bash
 npm run dev
-# or
+# ou
 yarn dev
-# or
+# ou
 pnpm dev
-# or
+# ou
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra [http://localhost:3000](http://localhost:3000) no navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📱 Como Usar
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### **1. Acesso**
 
-## Learn More
+- Acesse a aplicação em `http://localhost:3000`
+- Faça login com suas credenciais
+- Será redirecionado para o dashboard
 
-To learn more about Next.js, take a look at the following resources:
+### **2. Gerenciar Tarefas**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Criar**: Preencha o formulário e clique em "Adicionar Tarefa"
+- **Filtrar**: Use os botões "Todas", "Pendentes", "Concluídas"
+- **Editar**: Clique no ícone ✏️ da tarefa
+- **Completar**: Clique no círculo ao lado da tarefa
+- **Deletar**: Clique no ícone 🗑️ (com confirmação)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### **3. Dashboard**
 
-## Deploy on Vercel
+- Visualize estatísticas em tempo real
+- Acompanhe progresso das tarefas
+- Interface otimizada para produtividade
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🚀 Scripts Disponíveis
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+# Desenvolvimento
+npm run dev
+
+# Build para produção
+npm run build
+
+# Executar build de produção
+npm run start
+
+# Verificar qualidade do código
+npm run lint
+```
+
+## 🌐 Deploy
+
+### **Vercel (Recomendado)**
+
+1. Conecte seu repositório no [Vercel](https://vercel.com)
+2. Configure as variáveis de ambiente
+3. Deploy automático em cada commit
+
+### **Outras Plataformas**
+
+- Netlify
+- Railway
+- Render
+- AWS Amplify
+
+## 🤝 Contribuição
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -m 'Adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
+
+## 📋 Estrutura do Banco de Dados
+
+### **Tabela: todos**
+
+| Campo         | Tipo      | Descrição                           |
+| ------------- | --------- | ----------------------------------- |
+| `id`          | BIGINT    | Chave primária (auto-incremento)    |
+| `user_id`     | UUID      | Referência ao usuário autenticado   |
+| `task`        | TEXT      | Título da tarefa (obrigatório)      |
+| `description` | TEXT      | Descrição opcional da tarefa        |
+| `is_complete` | BOOLEAN   | Status de conclusão (padrão: false) |
+| `inserted_at` | TIMESTAMP | Data/hora de criação                |
+
+## 🔧 Arquitetura
+
+### **Server Actions**
+
+- Todas as operações CRUD executam no servidor
+- Segurança e performance otimizadas
+- Revalidação automática de cache
+
+### **Middleware de Autenticação**
+
+- Proteção de rotas sensíveis
+- Gerenciamento de sessões
+- Redirecionamento inteligente
+
+### **Componentes Reutilizáveis**
+
+- Interface modular e escalável
+- TypeScript para tipagem segura
+- Tailwind para estilização consistente
+
+## 📞 Suporte
+
+Para dúvidas, problemas ou sugestões:
+
+- Abra uma issue no repositório
+- Entre em contato com a equipe de desenvolvimento
+
+---
+
+**Desenvolvido por David Brigido**
