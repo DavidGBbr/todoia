@@ -1,7 +1,13 @@
-import { type NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { updateSession } from "@/utils/supabase/middleware";
 
 export async function middleware(request: NextRequest) {
+  // Permitir que rotas da API passem sem interferência
+  if (request.nextUrl.pathname.startsWith('/api/')) {
+    return NextResponse.next();
+  }
+
+  // Aplicar middleware apenas para rotas de páginas
   return await updateSession(request);
 }
 
