@@ -196,6 +196,9 @@ export const toggleTodoComplete = async (
   }
 
   revalidatePath("/dashboard");
+
+
+  revalidatePath("/dashboard");
   return { success: true };
 };
 

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Link from "next/link";
 import {
   createTodo,
   improveTaskDescription,
@@ -220,67 +221,95 @@ const DashboardPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-300">Carregando suas tarefas...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      {/* Header */}
+      <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-lg border-b border-white/20 dark:border-gray-700/50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900">Tasks</h1>
-            <button
-              onClick={() => setShowAddForm(!showAddForm)}
-              className="flex items-center space-x-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-200"
-            >
-              <span>+</span>
-              <span>Add Task</span>
-            </button>
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                <span className="text-white font-bold text-xl">📋</span>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  Todo-IA
+                </h1>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Dashboard Inteligente</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => setShowAddForm(!showAddForm)}
+                className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-blue-600 hover:to-purple-700 transition duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+              >
+                <span className="text-lg">+</span>
+                <span className="font-semibold">Nova Tarefa</span>
+              </button>
+              
+              <Link
+                href="/"
+                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-200 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                🏠 Home
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Formulário de Nova Tarefa */}
         {showAddForm && (
-          <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-800">
-                Adicionar Nova Tarefa
+          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-white/20 dark:border-gray-700/50 shadow-xl p-8 mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                ✨ Adicionar Nova Tarefa
               </h2>
               <button
                 onClick={() => setShowAddForm(false)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl hover:scale-110 transition duration-200"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleCreateTodo} className="space-y-4">
+            <form onSubmit={handleCreateTodo} className="space-y-6">
               <div>
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  Título da Tarefa
+                </label>
                 <input
                   type="text"
                   name="task"
                   value={newTask}
                   onChange={(e) => setNewTask(e.target.value)}
-                  placeholder="Título da tarefa..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
+                  placeholder="Digite o título da sua tarefa..."
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white bg-white dark:bg-gray-700 transition duration-200"
                   required
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                     Descrição (opcional)
-                  </span>
+                  </label>
                   <button
                     type="button"
                     onClick={handleImproveNewTask}
                     disabled={!newTask.trim() || isImprovingNew}
-                    className="flex items-center space-x-1 px-3 py-1 text-sm bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-md hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                    className="flex items-center space-x-2 px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg"
                   >
                     <span>🤖</span>
                     <span>
@@ -292,19 +321,19 @@ const DashboardPage = () => {
                   name="description"
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
-                  placeholder="Digite uma descrição ou use o botão 'Melhorar com IA'..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900 resize-none"
+                  placeholder="Digite uma descrição ou use o botão 'Melhorar com IA' para criar uma descrição inteligente..."
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white bg-white dark:bg-gray-700 resize-none transition duration-200"
                   rows={4}
                 />
               </div>
 
-              <div className="flex space-x-3">
+              <div className="flex space-x-4">
                 <button
                   type="submit"
                   disabled={isCreating || !newTask.trim()}
-                  className="flex-1 bg-red-500 text-white py-3 px-4 rounded-lg hover:bg-red-600 transition duration-200 font-medium disabled:opacity-50"
+                  className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-xl hover:from-blue-600 hover:to-purple-700 transition duration-200 font-semibold disabled:opacity-50 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
-                  {isCreating ? "Adicionando..." : "Adicionar Tarefa"}
+                  {isCreating ? "Adicionando..." : "✨ Adicionar Tarefa"}
                 </button>
                 <button
                   type="button"
@@ -313,7 +342,7 @@ const DashboardPage = () => {
                     setNewTask("");
                     setNewDescription("");
                   }}
-                  className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200"
+                  className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-200"
                 >
                   Cancelar
                 </button>
@@ -322,47 +351,58 @@ const DashboardPage = () => {
           </div>
         )}
 
-        <div className="flex justify-center space-x-1 mb-6">
+        {/* Filtros */}
+        <div className="flex justify-center space-x-2 mb-8">
           {[
-            { key: "all", label: "All" },
-            { key: "pending", label: "To Do" },
-            { key: "completed", label: "Done" },
-          ].map(({ key, label }) => (
+            { key: "all", label: "Todas", icon: "📋" },
+            { key: "pending", label: "Pendentes", icon: "⏳" },
+            { key: "completed", label: "Concluídas", icon: "✅" },
+          ].map(({ key, label, icon }) => (
             <button
               key={key}
               onClick={() => setFilter(key as "all" | "completed" | "pending")}
-              className={`px-4 py-2 rounded-lg font-medium transition duration-200 text-sm ${
+              className={`px-6 py-3 rounded-xl font-semibold transition duration-200 text-sm flex items-center space-x-2 ${
                 filter === key
-                  ? "bg-red-500 text-white"
-                  : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
+                  ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg"
+                  : "bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600"
               }`}
             >
-              {label}
+              <span>{icon}</span>
+              <span>{label}</span>
             </button>
           ))}
         </div>
 
-        <div className="space-y-3">
+        {/* Lista de Tarefas */}
+        <div className="space-y-4">
           {filteredTodos.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-              <div className="text-4xl mb-4">📝</div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <div className="text-center py-16 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-white/20 dark:border-gray-700/50 shadow-xl">
+              <div className="text-6xl mb-6">📝</div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
                 Nenhuma tarefa encontrada
               </h3>
-              <p className="text-gray-500 text-sm">
+              <p className="text-gray-600 dark:text-gray-300 text-lg">
                 {filter === "all"
-                  ? "Comece adicionando sua primeira tarefa!"
+                  ? "Comece adicionando sua primeira tarefa inteligente!"
                   : getFilterMessage(filter)}
               </p>
+              {filter !== "all" && (
+                <button
+                  onClick={() => setFilter("all")}
+                  className="mt-4 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
+                >
+                  Ver todas as tarefas
+                </button>
+              )}
             </div>
           ) : (
             filteredTodos.map((todo) => (
               <div
                 key={todo.id}
-                className="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200"
+                className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-white/20 dark:border-gray-700/50 shadow-lg hover:shadow-xl transition-all duration-200"
               >
                 {editingTodo?.id === todo.id ? (
-                  <div className="p-4 space-y-4">
+                  <div className="p-6 space-y-4">
                     <input
                       type="text"
                       value={editingTodo.task}
@@ -372,19 +412,19 @@ const DashboardPage = () => {
                           task: e.target.value,
                         })
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 text-gray-900"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white bg-white dark:bg-gray-700 transition duration-200"
                     />
 
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-gray-700">
+                        <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                           Descrição
-                        </span>
+                        </label>
                         <button
                           type="button"
                           onClick={handleImproveEdit}
                           disabled={!editingTodo.task.trim() || isImprovingEdit}
-                          className="flex items-center space-x-1 px-3 py-1 text-sm bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-md hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                          className="flex items-center space-x-2 px-3 py-2 text-sm bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg"
                         >
                           <span>🤖</span>
                           <span>
@@ -403,43 +443,43 @@ const DashboardPage = () => {
                           })
                         }
                         placeholder="Digite uma descrição ou use o botão 'Melhorar com IA'..."
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 text-gray-900 resize-none"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white bg-white dark:bg-gray-700 resize-none transition duration-200"
                         rows={3}
                       />
                     </div>
 
-                    <div className="flex space-x-2">
+                    <div className="flex space-x-3">
                       <button
                         onClick={handleSaveEdit}
-                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200 text-sm"
+                        className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition duration-200 text-sm font-semibold shadow-md hover:shadow-lg"
                       >
-                        Salvar
+                        💾 Salvar
                       </button>
                       <button
                         onClick={() => setEditingTodo(null)}
-                        className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-200 text-sm"
+                        className="px-6 py-2 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition duration-200 text-sm font-semibold"
                       >
                         Cancelar
                       </button>
                     </div>
                   </div>
                 ) : (
-                  <div className="p-4">
+                  <div className="p-6">
                     <div className="flex items-start justify-between">
-                      <div className="flex items-start space-x-3 flex-1">
+                      <div className="flex items-start space-x-4 flex-1">
                         <button
                           onClick={() =>
                             handleToggleCompleted(todo.id, todo.is_complete)
                           }
-                          className={`mt-1 w-5 h-5 rounded-full border-2 flex items-center justify-center transition duration-200 ${
+                          className={`mt-1 w-6 h-6 rounded-full border-2 flex items-center justify-center transition duration-200 ${
                             todo.is_complete
                               ? "bg-green-500 border-green-500 text-white"
-                              : "border-gray-300 hover:border-red-500"
+                              : "border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400"
                           }`}
                         >
                           {todo.is_complete && (
                             <svg
-                              className="w-3 h-3"
+                              className="w-4 h-4"
                               fill="currentColor"
                               viewBox="0 0 20 20"
                             >
@@ -454,17 +494,17 @@ const DashboardPage = () => {
 
                         <div className="flex-1 min-w-0">
                           <h3
-                            className={`text-lg font-medium ${
+                            className={`text-lg font-semibold ${
                               todo.is_complete
                                 ? "text-gray-500 line-through"
-                                : "text-gray-900"
+                                : "text-gray-900 dark:text-white"
                             }`}
                           >
                             {todo.task}
                           </h3>
 
                           {todo.description && (
-                            <div className="mt-2">
+                            <div className="mt-3">
                               <MarkdownDescription
                                 content={todo.description}
                                 isCompleted={todo.is_complete}
@@ -475,7 +515,7 @@ const DashboardPage = () => {
                               {todo.description.length > 150 && (
                                 <button
                                   onClick={() => toggleExpanded(todo.id)}
-                                  className="mt-1 text-red-500 hover:text-red-600 text-sm font-medium"
+                                  className="mt-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
                                 >
                                   {expandedTodos.has(todo.id)
                                     ? "Ver menos"
@@ -487,14 +527,14 @@ const DashboardPage = () => {
                         </div>
                       </div>
 
-                      <div className="flex space-x-1 ml-4">
+                      <div className="flex space-x-2 ml-4">
                         <button
                           onClick={() => setEditingTodo(todo)}
-                          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200"
+                          className="p-3 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl transition duration-200"
                           title="Editar"
                         >
                           <svg
-                            className="w-4 h-4"
+                            className="w-5 h-5"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -509,11 +549,11 @@ const DashboardPage = () => {
                         </button>
                         <button
                           onClick={() => handleDeleteTodo(todo.id)}
-                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition duration-200"
+                          className="p-3 text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition duration-200"
                           title="Deletar"
                         >
                           <svg
-                            className="w-4 h-4"
+                            className="w-5 h-5"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -535,31 +575,42 @@ const DashboardPage = () => {
           )}
         </div>
 
+        {/* Estatísticas */}
         {todos.length > 0 && (
-          <div className="mt-8 bg-white rounded-lg border border-gray-200 shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              📊 Estatísticas
+          <div className="mt-12 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-white/20 dark:border-gray-700/50 shadow-xl p-8">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+              📊 Estatísticas do Dashboard
             </h3>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <div className="text-2xl font-bold text-blue-600">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl border border-blue-200 dark:border-blue-700">
+                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
                   {todos.length}
                 </div>
-                <div className="text-sm text-blue-700">Total</div>
+                <div className="text-blue-700 dark:text-blue-300 font-medium">Total de Tarefas</div>
               </div>
-              <div className="text-center p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                <div className="text-2xl font-bold text-yellow-600">
+              <div className="text-center p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 rounded-xl border border-yellow-200 dark:border-yellow-700">
+                <div className="text-3xl font-bold text-yellow-600 dark:text-yellow-400 mb-2">
                   {todos.filter((t) => !t.is_complete).length}
                 </div>
-                <div className="text-sm text-yellow-700">Pendentes</div>
+                <div className="text-yellow-700 dark:text-yellow-300 font-medium">Pendentes</div>
               </div>
-              <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
-                <div className="text-2xl font-bold text-green-600">
+              <div className="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl border border-green-200 dark:border-green-700">
+                <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
                   {todos.filter((t) => t.is_complete).length}
                 </div>
-                <div className="text-sm text-green-700">Concluídas</div>
+                <div className="text-green-700 dark:text-green-300 font-medium">Concluídas</div>
               </div>
             </div>
+            
+            {todos.length > 0 && (
+              <div className="mt-6 text-center">
+                <div className="inline-block bg-gray-100 dark:bg-gray-700 rounded-full p-2">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">
+                    Progresso: {Math.round((todos.filter(t => t.is_complete).length / todos.length) * 100)}%
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
