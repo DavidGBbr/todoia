@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Link from "next/link";
+import ChatWidget from "@/components/ChatWidget";
+import ChatStats from "@/components/ChatStats";
 import {
   createTodo,
   improveTaskDescription,
@@ -224,7 +226,9 @@ const DashboardPage = () => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-300">Carregando suas tarefas...</p>
+          <p className="text-gray-600 dark:text-gray-300">
+            Carregando suas tarefas...
+          </p>
         </div>
       </div>
     );
@@ -244,10 +248,12 @@ const DashboardPage = () => {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Todo-IA
                 </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Dashboard Inteligente</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Dashboard Inteligente
+                </p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setShowAddForm(!showAddForm)}
@@ -256,7 +262,15 @@ const DashboardPage = () => {
                 <span className="text-lg">+</span>
                 <span className="font-semibold">Nova Tarefa</span>
               </button>
-              
+
+              <Link
+                href="/chat"
+                className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-200 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <span>🤖</span>
+                <span>Chat IA</span>
+              </Link>
+
               <Link
                 href="/"
                 className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-200 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -269,6 +283,11 @@ const DashboardPage = () => {
       </header>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Estatísticas do Chat */}
+        <div className="mb-8">
+          <ChatStats />
+        </div>
+
         {/* Formulário de Nova Tarefa */}
         {showAddForm && (
           <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-white/20 dark:border-gray-700/50 shadow-xl p-8 mb-8">
@@ -586,27 +605,39 @@ const DashboardPage = () => {
                 <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
                   {todos.length}
                 </div>
-                <div className="text-blue-700 dark:text-blue-300 font-medium">Total de Tarefas</div>
+                <div className="text-blue-700 dark:text-blue-300 font-medium">
+                  Total de Tarefas
+                </div>
               </div>
               <div className="text-center p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 rounded-xl border border-yellow-200 dark:border-yellow-700">
                 <div className="text-3xl font-bold text-yellow-600 dark:text-yellow-400 mb-2">
                   {todos.filter((t) => !t.is_complete).length}
                 </div>
-                <div className="text-yellow-700 dark:text-yellow-300 font-medium">Pendentes</div>
+                <div className="text-yellow-700 dark:text-yellow-300 font-medium">
+                  Pendentes
+                </div>
               </div>
               <div className="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl border border-green-200 dark:border-green-700">
                 <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
                   {todos.filter((t) => t.is_complete).length}
                 </div>
-                <div className="text-green-700 dark:text-green-300 font-medium">Concluídas</div>
+                <div className="text-green-700 dark:text-green-300 font-medium">
+                  Concluídas
+                </div>
               </div>
             </div>
-            
+
             {todos.length > 0 && (
               <div className="mt-6 text-center">
                 <div className="inline-block bg-gray-100 dark:bg-gray-700 rounded-full p-2">
                   <span className="text-sm text-gray-600 dark:text-gray-300">
-                    Progresso: {Math.round((todos.filter(t => t.is_complete).length / todos.length) * 100)}%
+                    Progresso:{" "}
+                    {Math.round(
+                      (todos.filter((t) => t.is_complete).length /
+                        todos.length) *
+                        100
+                    )}
+                    %
                   </span>
                 </div>
               </div>
@@ -614,6 +645,9 @@ const DashboardPage = () => {
           </div>
         )}
       </div>
+
+      {/* Chat Widget Flutuante */}
+      <ChatWidget />
     </div>
   );
 };

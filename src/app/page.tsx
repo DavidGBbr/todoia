@@ -198,7 +198,7 @@ export default function Home() {
             <span>OpenAI</span>
           </div>
           <div className="mt-6 text-gray-500 text-sm">
-            © 2024 Todo-IA. Desenvolvido por David Brigido.
+            © 2025 Todo-IA. Desenvolvido por David Brigido.
           </div>
         </div>
       </footer>

@@ -1,6 +1,6 @@
 # 📋 Todo-IA - Lista de Tarefas Inteligente
 
-Uma aplicação moderna de gerenciamento de tarefas construída com Next.js 15, Supabase e TypeScript. Interface elegante, autenticação segura e operações CRUD completas.
+Uma aplicação moderna de gerenciamento de tarefas construída com Next.js 15, Supabase e TypeScript. Interface elegante, autenticação segura e operações CRUD completas com enriquecimento automático por IA.
 
 ## 🚀 Visão Geral
 
@@ -8,20 +8,24 @@ Uma aplicação moderna de gerenciamento de tarefas construída com Next.js 15, 
 
 - ✅ **Sistema de autenticação** completo com Supabase Auth
 - ✅ **CRUD completo** de tarefas com Server Actions
-- ✅ **Interface moderna** e responsiva com Tailwind CSS
+- ✅ **Interface moderna** e responsiva com Tailwind CSS 4
 - ✅ **Segurança avançada** com Row Level Security (RLS)
 - ✅ **Performance otimizada** com Next.js 15 e App Router
 - ✅ **Experiência do usuário** intuitiva com estados de loading
-- 🤖 **Enriquecimento automático com IA** usando OpenAI GPT-4
+- 🤖 **Enriquecimento automático com IA** usando OpenAI GPT-4o-mini
+- 💬 **Chat inteligente** com assistente virtual integrado
+- 📱 **Design responsivo** mobile-first com Tailwind CSS 4
+- 📝 **Suporte a Markdown** com React Markdown e remark-gfm
 
 ## 🛠️ Stack Tecnológica
 
 ### **Frontend**
 
-- **[Next.js 15](https://nextjs.org/)** - Framework React com App Router
-- **[React 19](https://react.dev/)** - Biblioteca de interface do usuário
+- **[Next.js 15.5.0](https://nextjs.org/)** - Framework React com App Router
+- **[React 19.1.0](https://react.dev/)** - Biblioteca de interface do usuário
 - **[TypeScript 5](https://www.typescriptlang.org/)** - Tipagem estática
-- **[Tailwind CSS 4](https://tailwindcss.com/)** - Framework de estilização
+- **[Tailwind CSS 4.1.12](https://tailwindcss.com/)** - Framework de estilização moderna
+- **[@tailwindcss/typography](https://github.com/tailwindcss/typography)** - Plugin para tipografia
 
 ### **Backend & Banco de Dados**
 
@@ -32,14 +36,16 @@ Uma aplicação moderna de gerenciamento de tarefas construída com Next.js 15, 
 
 ### **Inteligência Artificial**
 
-- **[OpenAI API](https://openai.com/)** - GPT-4 para enriquecimento automático
+- **[OpenAI API](https://openai.com/)** - GPT-4o-mini para enriquecimento automático
 - **Server Actions** - Processamento assíncrono no servidor
+- **Prompt Engineering** - Sistema otimizado para gerar descrições úteis
 
 ### **Ferramentas de Desenvolvimento**
 
-- **ESLint** - Linter para qualidade de código
-- **PostCSS** - Processador de CSS
-- **Geist Font** - Fonte otimizada da Vercel
+- **ESLint 9** - Linter para qualidade de código
+- **PostCSS** - Processador de CSS com Tailwind CSS 4
+- **React Markdown** - Renderização de conteúdo Markdown
+- **remark-gfm** - Suporte a GitHub Flavored Markdown
 
 ## 📁 Estrutura do Projeto
 
@@ -48,16 +54,20 @@ todo-ia/
 ├── src/
 │   ├── app/
 │   │   ├── dashboard/
-│   │   │   ├── action.ts          # Server Actions para CRUD
+│   │   │   ├── action.ts          # Server Actions para CRUD e IA
 │   │   │   ├── layout.tsx         # Layout do dashboard
 │   │   │   └── page.tsx           # Página principal do dashboard
+│   │   ├── chat/
+│   │   │   ├── action.ts          # Server Actions para chat com IA
+│   │   │   ├── layout.tsx         # Layout da página de chat
+│   │   │   └── page.tsx           # Página de chat inteligente
 │   │   ├── login/
 │   │   │   ├── action.ts          # Server Action de autenticação
 │   │   │   ├── layout.tsx         # Layout da página de login
 │   │   │   └── page.tsx           # Página de login
 │   │   ├── layout.tsx             # Layout raiz da aplicação
-│   │   ├── page.tsx               # Página inicial
-│   │   ├── globals.css            # Estilos globais
+│   │   ├── page.tsx               # Página inicial/landing
+│   │   ├── globals.css            # Estilos globais com Tailwind CSS 4
 │   │   └── favicon.ico            # Ícone da aplicação
 │   ├── utils/
 │   │   └── supabase/
@@ -65,10 +75,14 @@ todo-ia/
 │   │       ├── server.ts          # Cliente Supabase (servidor)
 │   │       └── middleware.ts      # Middleware de autenticação
 │   └── middleware.ts              # Middleware global do Next.js
+├── src/
+│   └── components/                # Componentes reutilizáveis
+│       └── ChatWidget.tsx         # Widget de chat flutuante
 ├── public/                        # Arquivos estáticos
 ├── package.json                   # Dependências e scripts
 ├── tsconfig.json                  # Configuração TypeScript
-├── tailwind.config.js             # Configuração Tailwind CSS
+├── postcss.config.mjs             # Configuração PostCSS com Tailwind
+├── eslint.config.mjs              # Configuração ESLint
 ├── next.config.ts                 # Configuração Next.js
 └── README.md                      # Documentação do projeto
 ```
@@ -77,7 +91,7 @@ todo-ia/
 
 ### **🔐 Autenticação**
 
-- Login seguro com email e senha
+- Login seguro com email e senha via Supabase Auth
 - Sessões persistentes com cookies httpOnly
 - Redirecionamento automático baseado no estado de autenticação
 - Middleware de proteção de rotas
@@ -89,14 +103,25 @@ todo-ia/
 - **Editar**: Modificar tarefas existentes inline
 - **Deletar**: Remover tarefas com confirmação
 - **Alternar Status**: Marcar como concluída/pendente
+- **Expansão**: Visualizar descrições completas ou truncadas
 
 ### **🤖 Enriquecimento com IA**
 
-- **Botão de melhoria**: Botão "🤖 Melhorar com IA" nos formulários de criação e edição
-- **Descrição inteligente**: A IA analisa o título e descrição atual para criar uma versão melhorada
-- **Controle manual**: Usuário decide quando usar a IA clicando no botão específico
-- **Feedback visual**: Estados de carregamento indicam quando a IA está processando
-- **Pré-visualização**: Usuário vê a descrição gerada antes de salvar a tarefa
+- **Botão de melhoria**: Botão "🤖 Melhorar com IA" nos formulários
+- **Descrição inteligente**: IA analisa título e descrição para criar versão melhorada
+- **Controle manual**: Usuário decide quando usar a IA
+- **Feedback visual**: Estados de carregamento durante processamento
+- **Pré-visualização**: Usuário vê descrição gerada antes de salvar
+- **Suporte a Markdown**: Descrições geradas incluem formatação rica
+
+### **💬 Chat Inteligente**
+
+- **Assistente virtual**: Chat completo com IA para dúvidas sobre a aplicação
+- **Contexto inteligente**: IA entende o histórico da conversa
+- **Respostas personalizadas**: Explicações detalhadas sobre funcionalidades
+- **Widget flutuante**: Chat rápido disponível em todas as páginas
+- **Fallback inteligente**: Funciona mesmo sem IA configurada
+- **Interface WhatsApp**: Design familiar e intuitivo
 
 ### **📊 Dashboard Inteligente**
 
@@ -105,6 +130,7 @@ todo-ia/
 - Interface responsiva (mobile-first)
 - Estados de loading e feedback visual
 - Design moderno com micro-interações
+- Suporte a Markdown nas descrições
 
 ### **🔒 Segurança**
 
@@ -223,6 +249,7 @@ Abra [http://localhost:3000](http://localhost:3000) no navegador.
   4. Clique em "💾 Salvar" para confirmar
 - **Completar**: Clique no círculo ao lado da tarefa
 - **Deletar**: Clique no ícone 🗑️ (com confirmação)
+- **Expandir**: Clique para ver descrição completa
 
 ### **3. Enriquecimento com IA**
 
@@ -233,13 +260,23 @@ Abra [http://localhost:3000](http://localhost:3000) no navegador.
   2. Gera versão melhorada e mais detalhada
   3. Usuário revisa antes de salvar
 - **Requisitos**: Título obrigatório para usar a IA
+- **Formato**: Descrições geradas incluem Markdown para melhor organização
 
-### **3. Dashboard**
+### **4. Chat Inteligente**
+
+- **Chat completo**: Acesse `/chat` para conversa completa com IA
+- **Widget flutuante**: Botão flutuante no dashboard para chat rápido
+- **Contexto inteligente**: IA lembra do histórico da conversa
+- **Respostas personalizadas**: Explicações sobre funcionalidades da aplicação
+- **Fallback inteligente**: Funciona mesmo sem IA configurada
+
+### **5. Dashboard**
 
 - Visualize estatísticas em tempo real
 - Acompanhe progresso das tarefas
 - Interface otimizada para produtividade
 - Descrições enriquecidas pela IA para melhor contexto
+- Suporte completo a Markdown nas descrições
 
 ## 🤖 Exemplos de Enriquecimento com IA
 
@@ -297,8 +334,6 @@ Aprofundar conhecimentos em **React** para desenvolvimento web moderno, partindo
 - ✅ **Tabelas** (GitHub Flavored Markdown)
 
 ## 📝 Scripts Disponíveis
-
-## � Scripts Disponíveis
 
 ```bash
 # Desenvolvimento
@@ -403,7 +438,7 @@ Se a IA não estiver disponível:
 
 - Interface modular e escalável
 - TypeScript para tipagem segura
-- Tailwind para estilização consistente
+- Tailwind CSS 4 para estilização consistente
 - Integração inteligente com IA
 
 ### **Inteligência Artificial**
@@ -412,6 +447,16 @@ Se a IA não estiver disponível:
 - **Prompt Engineering**: Sistema otimizado para gerar descrições úteis
 - **Processamento Assíncrono**: Não bloqueia a interface do usuário
 - **Fallback Gracioso**: Sistema funciona mesmo sem IA configurada
+- **Suporte a Markdown**: Descrições geradas incluem formatação rica
+- **Chat Inteligente**: Assistente virtual com contexto de conversa
+- **Respostas Contextuais**: IA entende o histórico da conversa
+
+### **Tailwind CSS 4**
+
+- **Configuração moderna**: Usando PostCSS e configuração nativa
+- **Typography plugin**: Suporte avançado para tipografia
+- **Design system**: Componentes consistentes e responsivos
+- **Mobile-first**: Interface otimizada para dispositivos móveis
 
 ## 📞 Suporte
 
