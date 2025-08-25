@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/client";
-import { N8NChatHistory, N8NChatMessage, ChatMessage } from "@/types/chat";
+import { N8NChatHistory, ChatMessage } from "@/types/chat";
 
 export async function loadChatHistory(
   sessionId: string
@@ -29,39 +29,6 @@ export async function loadChatHistory(
   } catch (error) {
     console.error("Erro ao carregar histórico de chat:", error);
     return [];
-  }
-}
-
-export async function saveChatMessage(
-  sessionId: string,
-  content: string,
-  isUser: boolean
-): Promise<boolean> {
-  const supabase = createClient();
-
-  try {
-    const n8nMessage: N8NChatMessage = {
-      type: isUser ? "human" : "ai",
-      content: isUser ? `Mensagem do usuário: ${content}` : content,
-      additional_kwargs: {},
-      response_metadata: {},
-      ...(isUser ? {} : { tool_calls: [], invalid_tool_calls: [] }),
-    };
-
-    const { error } = await supabase.from("n8n_chat_histories").insert({
-      session_id: sessionId,
-      message: n8nMessage,
-    });
-
-    if (error) {
-      console.error("Erro ao salvar mensagem:", error);
-      return false;
-    }
-
-    return true;
-  } catch (error) {
-    console.error("Erro ao salvar mensagem:", error);
-    return false;
   }
 }
 
