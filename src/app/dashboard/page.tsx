@@ -67,8 +67,12 @@ const DashboardPage = () => {
   const [newTask, setNewTask] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [isImprovingNew, setIsImprovingNew] = useState(false);
+  const [newTaskAbortController, setNewTaskAbortController] =
+    useState<AbortController | null>(null);
 
   const [isImprovingEdit, setIsImprovingEdit] = useState(false);
+  const [editAbortController, setEditAbortController] =
+    useState<AbortController | null>(null);
   const [expandedTodos, setExpandedTodos] = useState<Set<number>>(new Set());
   const [showAddForm, setShowAddForm] = useState(false);
 
@@ -123,7 +127,15 @@ const DashboardPage = () => {
       return;
     }
 
+    // Cancela requisição anterior se existir
+    if (newTaskAbortController) {
+      newTaskAbortController.abort();
+    }
+
+    const abortController = new AbortController();
+    setNewTaskAbortController(abortController);
     setIsImprovingNew(true);
+
     try {
       const result = await improveTaskDescription(newTask, newDescription);
       if (result.success) {
@@ -133,11 +145,23 @@ const DashboardPage = () => {
           "Erro ao melhorar descrição: " + (result.error || "Erro desconhecido")
         );
       }
-    } catch (error) {
-      console.error("Erro ao melhorar descrição:", error);
-      alert("Erro ao melhorar descrição");
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name !== "AbortError") {
+        console.error("Erro ao melhorar descrição:", error);
+        alert("Erro ao melhorar descrição");
+      }
+    } finally {
+      setIsImprovingNew(false);
+      setNewTaskAbortController(null);
     }
-    setIsImprovingNew(false);
+  };
+
+  const cancelNewTaskImprovement = () => {
+    if (newTaskAbortController) {
+      newTaskAbortController.abort();
+      setNewTaskAbortController(null);
+      setIsImprovingNew(false);
+    }
   };
 
   const handleImproveEdit = async () => {
@@ -145,7 +169,15 @@ const DashboardPage = () => {
       return;
     }
 
+    // Cancela requisição anterior se existir
+    if (editAbortController) {
+      editAbortController.abort();
+    }
+
+    const abortController = new AbortController();
+    setEditAbortController(abortController);
     setIsImprovingEdit(true);
+
     try {
       const result = await improveTaskDescription(
         editingTodo.task,
@@ -161,11 +193,23 @@ const DashboardPage = () => {
           "Erro ao melhorar descrição: " + (result.error || "Erro desconhecido")
         );
       }
-    } catch (error) {
-      console.error("Erro ao melhorar descrição:", error);
-      alert("Erro ao melhorar descrição");
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name !== "AbortError") {
+        console.error("Erro ao melhorar descrição:", error);
+        alert("Erro ao melhorar descrição");
+      }
+    } finally {
+      setIsImprovingEdit(false);
+      setEditAbortController(null);
     }
-    setIsImprovingEdit(false);
+  };
+
+  const cancelEditImprovement = () => {
+    if (editAbortController) {
+      editAbortController.abort();
+      setEditAbortController(null);
+      setIsImprovingEdit(false);
+    }
   };
 
   const handleUpdateTodo = async (
@@ -257,7 +301,7 @@ const DashboardPage = () => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setShowAddForm(!showAddForm)}
-                className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-blue-600 hover:to-purple-700 transition duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-blue-600 hover:to-purple-700 transition duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
               >
                 <span className="text-lg">+</span>
                 <span className="font-semibold">Nova Tarefa</span>
@@ -265,7 +309,7 @@ const DashboardPage = () => {
 
               <Link
                 href="/chat"
-                className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-200 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-200 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
               >
                 <span>🤖</span>
                 <span>Chat IA</span>
@@ -273,7 +317,7 @@ const DashboardPage = () => {
 
               <Link
                 href="/"
-                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-200 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-200 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
               >
                 🏠 Home
               </Link>
@@ -297,7 +341,7 @@ const DashboardPage = () => {
               </h2>
               <button
                 onClick={() => setShowAddForm(false)}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl hover:scale-110 transition duration-200"
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl hover:scale-110 transition duration-200 cursor-pointer"
               >
                 ✕
               </button>
@@ -324,17 +368,27 @@ const DashboardPage = () => {
                   <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                     Descrição (opcional)
                   </label>
-                  <button
-                    type="button"
-                    onClick={handleImproveNewTask}
-                    disabled={!newTask.trim() || isImprovingNew}
-                    className="flex items-center space-x-2 px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg"
-                  >
-                    <span>🤖</span>
-                    <span>
-                      {isImprovingNew ? "Melhorando..." : "Melhorar com IA"}
-                    </span>
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      type="button"
+                      onClick={
+                        isImprovingNew
+                          ? cancelNewTaskImprovement
+                          : handleImproveNewTask
+                      }
+                      disabled={!newTask.trim()}
+                      className={`flex items-center space-x-2 px-4 py-2 text-sm rounded-lg transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer ${
+                        isImprovingNew
+                          ? "bg-red-500 hover:bg-red-600 text-white"
+                          : "bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700"
+                      } disabled:opacity-50 disabled:cursor-not-allowed`}
+                    >
+                      <span>{isImprovingNew ? "❌" : "🤖"}</span>
+                      <span>
+                        {isImprovingNew ? "Cancelar" : "Melhorar com IA"}
+                      </span>
+                    </button>
+                  </div>
                 </div>
                 <textarea
                   name="description"
@@ -349,8 +403,8 @@ const DashboardPage = () => {
               <div className="flex space-x-4">
                 <button
                   type="submit"
-                  disabled={isCreating || !newTask.trim()}
-                  className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-xl hover:from-blue-600 hover:to-purple-700 transition duration-200 font-semibold disabled:opacity-50 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  disabled={isCreating || !newTask.trim() || isImprovingNew}
+                  className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-xl hover:from-blue-600 hover:to-purple-700 transition duration-200 font-semibold disabled:opacity-50 shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer disabled:cursor-not-allowed"
                 >
                   {isCreating ? "Adicionando..." : "✨ Adicionar Tarefa"}
                 </button>
@@ -360,8 +414,9 @@ const DashboardPage = () => {
                     setShowAddForm(false);
                     setNewTask("");
                     setNewDescription("");
+                    cancelNewTaskImprovement();
                   }}
-                  className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-200"
+                  className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-200 cursor-pointer"
                 >
                   Cancelar
                 </button>
@@ -380,7 +435,7 @@ const DashboardPage = () => {
             <button
               key={key}
               onClick={() => setFilter(key as "all" | "completed" | "pending")}
-              className={`px-6 py-3 rounded-xl font-semibold transition duration-200 text-sm flex items-center space-x-2 ${
+              className={`px-6 py-3 rounded-xl font-semibold transition duration-200 text-sm flex items-center space-x-2 cursor-pointer ${
                 filter === key
                   ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg"
                   : "bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600"
@@ -441,15 +496,21 @@ const DashboardPage = () => {
                         </label>
                         <button
                           type="button"
-                          onClick={handleImproveEdit}
-                          disabled={!editingTodo.task.trim() || isImprovingEdit}
-                          className="flex items-center space-x-2 px-3 py-2 text-sm bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg"
+                          onClick={
+                            isImprovingEdit
+                              ? cancelEditImprovement
+                              : handleImproveEdit
+                          }
+                          disabled={!editingTodo.task.trim()}
+                          className={`flex items-center space-x-2 px-3 py-2 text-sm rounded-lg transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer ${
+                            isImprovingEdit
+                              ? "bg-red-500 hover:bg-red-600 text-white"
+                              : "bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700"
+                          } disabled:opacity-50 disabled:cursor-not-allowed`}
                         >
-                          <span>🤖</span>
+                          <span>{isImprovingEdit ? "❌" : "🤖"}</span>
                           <span>
-                            {isImprovingEdit
-                              ? "Melhorando..."
-                              : "Melhorar com IA"}
+                            {isImprovingEdit ? "Cancelar" : "Melhorar com IA"}
                           </span>
                         </button>
                       </div>
@@ -470,13 +531,17 @@ const DashboardPage = () => {
                     <div className="flex space-x-3">
                       <button
                         onClick={handleSaveEdit}
-                        className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition duration-200 text-sm font-semibold shadow-md hover:shadow-lg"
+                        disabled={isImprovingEdit}
+                        className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition duration-200 text-sm font-semibold shadow-md hover:shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         💾 Salvar
                       </button>
                       <button
-                        onClick={() => setEditingTodo(null)}
-                        className="px-6 py-2 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition duration-200 text-sm font-semibold"
+                        onClick={() => {
+                          setEditingTodo(null);
+                          cancelEditImprovement();
+                        }}
+                        className="px-6 py-2 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition duration-200 text-sm font-semibold cursor-pointer"
                       >
                         Cancelar
                       </button>
@@ -490,7 +555,7 @@ const DashboardPage = () => {
                           onClick={() =>
                             handleToggleCompleted(todo.id, todo.is_complete)
                           }
-                          className={`mt-1 w-6 h-6 rounded-full border-2 flex items-center justify-center transition duration-200 ${
+                          className={`mt-1 w-6 h-6 rounded-full border-2 flex items-center justify-center transition duration-200 cursor-pointer ${
                             todo.is_complete
                               ? "bg-green-500 border-green-500 text-white"
                               : "border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400"
@@ -534,7 +599,7 @@ const DashboardPage = () => {
                               {todo.description.length > 150 && (
                                 <button
                                   onClick={() => toggleExpanded(todo.id)}
-                                  className="mt-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
+                                  className="mt-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium cursor-pointer"
                                 >
                                   {expandedTodos.has(todo.id)
                                     ? "Ver menos"
@@ -549,7 +614,7 @@ const DashboardPage = () => {
                       <div className="flex space-x-2 ml-4">
                         <button
                           onClick={() => setEditingTodo(todo)}
-                          className="p-3 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl transition duration-200"
+                          className="p-3 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl transition duration-200 cursor-pointer"
                           title="Editar"
                         >
                           <svg
@@ -568,7 +633,7 @@ const DashboardPage = () => {
                         </button>
                         <button
                           onClick={() => handleDeleteTodo(todo.id)}
-                          className="p-3 text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition duration-200"
+                          className="p-3 text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition duration-200 cursor-pointer"
                           title="Deletar"
                         >
                           <svg
