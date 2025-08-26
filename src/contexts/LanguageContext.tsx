@@ -216,6 +216,9 @@ const translations = {
     // Language Toggle
     "language.portuguese": "Português",
     "language.english": "English",
+
+    // WhatsApp
+    "whatsapp.message": "Hello!",
   },
   pt: {
     // Header/Navigation
@@ -363,5 +366,8 @@ const translations = {
     // Language Toggle
     "language.portuguese": "Português",
     "language.english": "English",
+
+    // WhatsApp
+    "whatsapp.message": "Olá!",
   },
 };

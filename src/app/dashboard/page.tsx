@@ -4,8 +4,7 @@ import React, { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Link from "next/link";
-import ChatWidget from "@/components/ChatWidget";
-import ChatStats from "@/components/ChatStats";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import LanguageToggle from "@/components/LanguageToggle";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
@@ -723,8 +722,8 @@ const DashboardPage = () => {
         )}
       </div>
 
-      {/* Chat Widget Flutuante */}
-      <ChatWidget />
+      {/* Botão WhatsApp Flutuante */}
+      <WhatsAppButton />
     </div>
   );
 };
