@@ -6,8 +6,11 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useChatHistory } from "@/hooks/useChatHistory";
 import N8NStatus from "@/components/N8NStatus";
+import LanguageToggle from "@/components/LanguageToggle";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function ChatPage() {
+  const { t } = useLanguage();
   const [inputMessage, setInputMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -61,7 +64,7 @@ export default function ChatPage() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600 dark:text-gray-300">
-            Carregando histórico de conversas...
+            Loading chat history...
           </p>
         </div>
       </div>
@@ -97,7 +100,7 @@ export default function ChatPage() {
             </div>
             <div>
               <h1 className="font-semibold text-gray-900 dark:text-white">
-                Todo-IA Assistant
+                {t("chat.title")}
               </h1>
               <div className="flex items-center space-x-2">
                 <N8NStatus />
@@ -106,10 +109,12 @@ export default function ChatPage() {
           </div>
         </div>
         <div className="flex items-center space-x-2">
+          <LanguageToggle />
+
           <button
             onClick={reloadHistory}
             className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-            title="Sincronizar histórico"
+            title="Sync history"
           >
             <svg
               className="w-5 h-5 text-gray-600 dark:text-gray-400"
@@ -128,7 +133,7 @@ export default function ChatPage() {
           <button
             onClick={handleClearChat}
             className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-            title="Limpar conversa"
+            title="Clear chat"
           >
             <svg
               className="w-5 h-5 text-gray-600 dark:text-gray-400"
@@ -147,7 +152,7 @@ export default function ChatPage() {
           <button
             onClick={handleLogout}
             className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-            title="Sair"
+            title={t("dashboard.logout")}
           >
             <svg
               className="w-5 h-5 text-gray-600 dark:text-gray-400"
@@ -194,7 +199,9 @@ export default function ChatPage() {
                       style={{ animationDelay: "0.2s" }}
                     ></div>
                   </div>
-                  <span className="text-sm text-gray-500">Digitando...</span>
+                  <span className="text-sm text-gray-500">
+                    {t("chat.thinking")}
+                  </span>
                 </div>
               ) : (
                 <div className="whitespace-pre-wrap text-sm">
@@ -253,7 +260,7 @@ export default function ChatPage() {
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
-            placeholder="Digite sua mensagem..."
+            placeholder={t("chat.placeholder")}
             className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
             disabled={isSending}
           />

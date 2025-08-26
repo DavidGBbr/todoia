@@ -44,8 +44,8 @@ export default function N8NStatus({ showDetails = false }: N8NStatusProps) {
 
   const getStatusText = () => {
     if (isLoading) return "Verificando...";
-    if (isConnected) return "N8N Conectado";
-    return "N8N Desconectado";
+    if (isConnected) return "N8N On";
+    return "N8N Off";
   };
 
   const getStatusColor = () => {

@@ -16,7 +16,7 @@ const LoginPage = () => {
         <div className="flex justify-end">
           <LanguageToggle />
         </div>
-        
+
         {/* Logo e Header */}
         <div className="text-center">
           <div className="flex items-center justify-center space-x-2 mb-6">
@@ -99,7 +99,9 @@ const LoginPage = () => {
                 <div className="w-full border-t border-gray-300 dark:border-gray-600" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white/80 dark:bg-gray-800/80 text-gray-500 dark:text-gray-400">Or</span>
+                <span className="px-4 bg-white/80 dark:bg-gray-800/80 text-gray-500 dark:text-gray-400">
+                  Or
+                </span>
               </div>
             </div>
 

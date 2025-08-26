@@ -6,6 +6,8 @@ import remarkGfm from "remark-gfm";
 import Link from "next/link";
 import ChatWidget from "@/components/ChatWidget";
 import ChatStats from "@/components/ChatStats";
+import LanguageToggle from "@/components/LanguageToggle";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   createTodo,
   improveTaskDescription,
@@ -58,6 +60,7 @@ interface Todo {
 }
 
 const DashboardPage = () => {
+  const { t } = useLanguage();
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
@@ -77,9 +80,9 @@ const DashboardPage = () => {
   const [showAddForm, setShowAddForm] = useState(false);
 
   const getFilterMessage = (filterType: "completed" | "pending") => {
-    return `Nenhuma tarefa ${
-      filterType === "completed" ? "concluída" : "pendente"
-    } encontrada.`;
+    return filterType === "completed"
+      ? t("dashboard.no_tasks")
+      : t("dashboard.no_tasks");
   };
 
   const toggleExpanded = (todoId: number) => {
@@ -225,7 +228,7 @@ const DashboardPage = () => {
   };
 
   const handleDeleteTodo = async (id: number) => {
-    if (window.confirm("Tem certeza que deseja deletar esta tarefa?")) {
+    if (window.confirm(t("dashboard.confirm_delete"))) {
       const result = await deleteTodo(id);
       if (result?.success) {
         await fetchTodos();
@@ -293,18 +296,20 @@ const DashboardPage = () => {
                   Todo-IA
                 </h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Dashboard Inteligente
+                  {t("dashboard.title")}
                 </p>
               </div>
             </div>
 
             <div className="flex items-center space-x-4">
+              <LanguageToggle />
+
               <button
                 onClick={() => setShowAddForm(!showAddForm)}
                 className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-blue-600 hover:to-purple-700 transition duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
               >
                 <span className="text-lg">+</span>
-                <span className="font-semibold">Nova Tarefa</span>
+                <span className="font-semibold">{t("dashboard.add_task")}</span>
               </button>
 
               <Link
@@ -312,7 +317,7 @@ const DashboardPage = () => {
                 className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-200 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
               >
                 <span>🤖</span>
-                <span>Chat IA</span>
+                <span>{t("dashboard.chat")}</span>
               </Link>
 
               <Link
@@ -327,11 +332,6 @@ const DashboardPage = () => {
       </header>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Estatísticas do Chat */}
-        <div className="mb-8">
-          <ChatStats />
-        </div>
-
         {/* Formulário de Nova Tarefa */}
         {showAddForm && (
           <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-white/20 dark:border-gray-700/50 shadow-xl p-8 mb-8">
@@ -349,15 +349,19 @@ const DashboardPage = () => {
 
             <form onSubmit={handleCreateTodo} className="space-y-6">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  Título da Tarefa
+                <label
+                  htmlFor="new-task-title"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
+                >
+                  {t("dashboard.task_title")}
                 </label>
                 <input
                   type="text"
                   name="task"
+                  id="new-task-title"
                   value={newTask}
                   onChange={(e) => setNewTask(e.target.value)}
-                  placeholder="Digite o título da sua tarefa..."
+                  placeholder={t("dashboard.task_title_placeholder")}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white bg-white dark:bg-gray-700 transition duration-200"
                   required
                 />
@@ -365,8 +369,11 @@ const DashboardPage = () => {
 
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    Descrição (opcional)
+                  <label
+                    htmlFor="new-task-description"
+                    className="text-sm font-semibold text-gray-700 dark:text-gray-300"
+                  >
+                    {t("dashboard.task_description")}
                   </label>
                   <div className="flex items-center space-x-2">
                     <button
@@ -385,16 +392,19 @@ const DashboardPage = () => {
                     >
                       <span>{isImprovingNew ? "❌" : "🤖"}</span>
                       <span>
-                        {isImprovingNew ? "Cancelar" : "Melhorar com IA"}
+                        {isImprovingNew
+                          ? t("dashboard.cancel")
+                          : t("dashboard.improve_ai")}
                       </span>
                     </button>
                   </div>
                 </div>
                 <textarea
                   name="description"
+                  id="new-task-description"
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
-                  placeholder="Digite uma descrição ou use o botão 'Melhorar com IA' para criar uma descrição inteligente..."
+                  placeholder={t("dashboard.task_description_placeholder")}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white bg-white dark:bg-gray-700 resize-none transition duration-200"
                   rows={4}
                 />
@@ -406,7 +416,7 @@ const DashboardPage = () => {
                   disabled={isCreating || !newTask.trim() || isImprovingNew}
                   className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-xl hover:from-blue-600 hover:to-purple-700 transition duration-200 font-semibold disabled:opacity-50 shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer disabled:cursor-not-allowed"
                 >
-                  {isCreating ? "Adicionando..." : "✨ Adicionar Tarefa"}
+                  {isCreating ? t("dashboard.saving") : t("dashboard.add_task")}
                 </button>
                 <button
                   type="button"
@@ -418,7 +428,7 @@ const DashboardPage = () => {
                   }}
                   className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-200 cursor-pointer"
                 >
-                  Cancelar
+                  Cancel
                 </button>
               </div>
             </form>
@@ -428,9 +438,9 @@ const DashboardPage = () => {
         {/* Filtros */}
         <div className="flex justify-center space-x-2 mb-8">
           {[
-            { key: "all", label: "Todas", icon: "📋" },
-            { key: "pending", label: "Pendentes", icon: "⏳" },
-            { key: "completed", label: "Concluídas", icon: "✅" },
+            { key: "all", label: t("dashboard.all_tasks"), icon: "📋" },
+            { key: "pending", label: t("dashboard.pending"), icon: "⏳" },
+            { key: "completed", label: t("dashboard.completed"), icon: "✅" },
           ].map(({ key, label, icon }) => (
             <button
               key={key}
@@ -510,7 +520,9 @@ const DashboardPage = () => {
                         >
                           <span>{isImprovingEdit ? "❌" : "🤖"}</span>
                           <span>
-                            {isImprovingEdit ? "Cancelar" : "Melhorar com IA"}
+                            {isImprovingEdit
+                              ? "Improving..."
+                              : "Improve with IA"}
                           </span>
                         </button>
                       </div>
@@ -534,7 +546,7 @@ const DashboardPage = () => {
                         disabled={isImprovingEdit}
                         className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition duration-200 text-sm font-semibold shadow-md hover:shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        💾 Salvar
+                        💾 Save
                       </button>
                       <button
                         onClick={() => {
@@ -543,7 +555,7 @@ const DashboardPage = () => {
                         }}
                         className="px-6 py-2 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition duration-200 text-sm font-semibold cursor-pointer"
                       >
-                        Cancelar
+                        Cancel
                       </button>
                     </div>
                   </div>
@@ -663,7 +675,7 @@ const DashboardPage = () => {
         {todos.length > 0 && (
           <div className="mt-12 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-white/20 dark:border-gray-700/50 shadow-xl p-8">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
-              📊 Estatísticas do Dashboard
+              📊 Tasks Statistics
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl border border-blue-200 dark:border-blue-700">
@@ -671,7 +683,7 @@ const DashboardPage = () => {
                   {todos.length}
                 </div>
                 <div className="text-blue-700 dark:text-blue-300 font-medium">
-                  Total de Tarefas
+                  Total
                 </div>
               </div>
               <div className="text-center p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 rounded-xl border border-yellow-200 dark:border-yellow-700">
@@ -679,7 +691,7 @@ const DashboardPage = () => {
                   {todos.filter((t) => !t.is_complete).length}
                 </div>
                 <div className="text-yellow-700 dark:text-yellow-300 font-medium">
-                  Pendentes
+                  Pending
                 </div>
               </div>
               <div className="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl border border-green-200 dark:border-green-700">
@@ -687,7 +699,7 @@ const DashboardPage = () => {
                   {todos.filter((t) => t.is_complete).length}
                 </div>
                 <div className="text-green-700 dark:text-green-300 font-medium">
-                  Concluídas
+                  Concluded
                 </div>
               </div>
             </div>
@@ -696,7 +708,7 @@ const DashboardPage = () => {
               <div className="mt-6 text-center">
                 <div className="inline-block bg-gray-100 dark:bg-gray-700 rounded-full p-2">
                   <span className="text-sm text-gray-600 dark:text-gray-300">
-                    Progresso:{" "}
+                    Progress:{" "}
                     {Math.round(
                       (todos.filter((t) => t.is_complete).length /
                         todos.length) *

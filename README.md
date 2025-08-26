@@ -1,193 +1,214 @@
-# 📋 Todo-IA - Lista de Tarefas Inteligente
+# 📋 Todo-IA - Smart Task List
 
-Uma aplicação moderna de gerenciamento de tarefas construída com Next.js 15, Supabase e TypeScript. Interface elegante, autenticação segura e operações CRUD completas com enriquecimento automático por IA.
+A modern task management application built with Next.js 15, Supabase and TypeScript. Elegant interface, secure authentication and complete CRUD operations with automatic AI enhancement.
 
-## 🚀 Visão Geral
+## 🚀 Overview
 
-**Todo-IA** é uma aplicação web full-stack para gerenciamento de tarefas pessoais que oferece:
+**Todo-IA** is a full-stack web application for personal task management that offers:
 
-- ✅ **Sistema de autenticação** completo com Supabase Auth
-- ✅ **CRUD completo** de tarefas com Server Actions
-- ✅ **Interface moderna** e responsiva com Tailwind CSS 4
-- ✅ **Segurança avançada** com Row Level Security (RLS)
-- ✅ **Performance otimizada** com Next.js 15 e App Router
-- ✅ **Experiência do usuário** intuitiva com estados de loading
-- 🤖 **Enriquecimento automático com IA** usando OpenAI GPT-4o-mini
-- 💬 **Chat inteligente** com assistente virtual integrado
-- 📱 **Design responsivo** mobile-first com Tailwind CSS 4
-- 📝 **Suporte a Markdown** com React Markdown e remark-gfm
+- ✅ **Complete authentication system** with Supabase Auth
+- ✅ **Full CRUD operations** for tasks with Server Actions
+- ✅ **Modern and responsive interface** with Tailwind CSS 4
+- ✅ **Advanced security** with Row Level Security (RLS)
+- ✅ **Optimized performance** with Next.js 15 and App Router
+- ✅ **Intuitive user experience** with loading states
+- 🤖 **Automatic AI enhancement** using OpenAI GPT-4o-mini
+- 💬 **Smart chat** with integrated virtual assistant
+- 📱 **Responsive design** mobile-first with Tailwind CSS 4
+- 📝 **Markdown support** with React Markdown and remark-gfm
+- 🌐 **Multi-language support** (English/Portuguese) with language toggle
 
-## 🛠️ Stack Tecnológica
+## 🛠️ Technology Stack
 
 ### **Frontend**
 
-- **[Next.js 15.5.0](https://nextjs.org/)** - Framework React com App Router
-- **[React 19.1.0](https://react.dev/)** - Biblioteca de interface do usuário
-- **[TypeScript 5](https://www.typescriptlang.org/)** - Tipagem estática
-- **[Tailwind CSS 4.1.12](https://tailwindcss.com/)** - Framework de estilização moderna
-- **[@tailwindcss/typography](https://github.com/tailwindcss/typography)** - Plugin para tipografia
+- **[Next.js 15.5.0](https://nextjs.org/)** - React framework with App Router
+- **[React 19.1.0](https://react.dev/)** - User interface library
+- **[TypeScript 5](https://www.typescriptlang.org/)** - Static typing
+- **[Tailwind CSS 4.1.12](https://tailwindcss.com/)** - Modern styling framework
+- **[@tailwindcss/typography](https://github.com/tailwindcss/typography)** - Typography plugin
 
-### **Backend & Banco de Dados**
+### **Backend & Database**
 
-- **[Supabase](https://supabase.com/)** - Backend como serviço (BaaS)
-- **PostgreSQL** - Banco de dados relacional
-- **Supabase Auth** - Sistema de autenticação
-- **Row Level Security (RLS)** - Segurança em nível de linha
+- **[Supabase](https://supabase.com/)** - Backend as a Service (BaaS)
+- **PostgreSQL** - Relational database
+- **Supabase Auth** - Authentication system
+- **Row Level Security (RLS)** - Row-level security
 
-### **Inteligência Artificial**
+### **Artificial Intelligence**
 
-- **[OpenAI API](https://openai.com/)** - GPT-4o-mini para enriquecimento automático
-- **Server Actions** - Processamento assíncrono no servidor
-- **Prompt Engineering** - Sistema otimizado para gerar descrições úteis
+- **[OpenAI API](https://openai.com/)** - GPT-4o-mini for automatic enhancement
+- **Server Actions** - Asynchronous server processing
+- **Prompt Engineering** - Optimized system for generating useful descriptions
 
-### **Ferramentas de Desenvolvimento**
+### **Development Tools**
 
-- **ESLint 9** - Linter para qualidade de código
-- **PostCSS** - Processador de CSS com Tailwind CSS 4
-- **React Markdown** - Renderização de conteúdo Markdown
-- **remark-gfm** - Suporte a GitHub Flavored Markdown
+- **ESLint 9** - Code quality linter
+- **PostCSS** - CSS processor with Tailwind CSS 4
+- **React Markdown** - Markdown content rendering
+- **remark-gfm** - GitHub Flavored Markdown support
 
-## 📁 Estrutura do Projeto
+## 📁 Project Structure
 
 ```
 todo-ia/
 ├── src/
 │   ├── app/
 │   │   ├── dashboard/
-│   │   │   ├── action.ts          # Server Actions para CRUD e IA
-│   │   │   ├── layout.tsx         # Layout do dashboard
-│   │   │   └── page.tsx           # Página principal do dashboard
+│   │   │   ├── action.ts          # Server Actions for CRUD and AI
+│   │   │   ├── layout.tsx         # Dashboard layout
+│   │   │   └── page.tsx           # Main dashboard page
 │   │   ├── chat/
-│   │   │   ├── action.ts          # Server Actions para chat com IA
-│   │   │   ├── layout.tsx         # Layout da página de chat
-│   │   │   └── page.tsx           # Página de chat inteligente
+│   │   │   ├── action.ts          # Server Actions for AI chat
+│   │   │   ├── layout.tsx         # Chat page layout
+│   │   │   └── page.tsx           # Smart chat page
 │   │   ├── login/
-│   │   │   ├── action.ts          # Server Action de autenticação
-│   │   │   ├── layout.tsx         # Layout da página de login
-│   │   │   └── page.tsx           # Página de login
-│   │   ├── layout.tsx             # Layout raiz da aplicação
-│   │   ├── page.tsx               # Página inicial/landing
-│   │   ├── globals.css            # Estilos globais com Tailwind CSS 4
-│   │   └── favicon.ico            # Ícone da aplicação
+│   │   │   ├── action.ts          # Authentication Server Action
+│   │   │   ├── layout.tsx         # Login page layout
+│   │   │   └── page.tsx           # Login page
+│   │   ├── layout.tsx             # Root application layout
+│   │   ├── page.tsx               # Landing/home page
+│   │   ├── globals.css            # Global styles with Tailwind CSS 4
+│   │   └── favicon.ico            # Application icon
+│   ├── components/
+│   │   ├── ChatWidget.tsx         # Floating chat widget
+│   │   ├── ChatStats.tsx          # Chat statistics component
+│   │   ├── N8NStatus.tsx          # N8N status component
+│   │   └── LanguageToggle.tsx     # Language switcher component
+│   ├── contexts/
+│   │   └── LanguageContext.tsx    # Internationalization context
+│   ├── hooks/
+│   │   ├── useChatHistory.ts      # Chat history hook
+│   │   └── useIsClient.ts         # Client-side detection hook
+│   ├── services/
+│   │   └── n8n-chat.ts           # N8N chat service
+│   ├── types/
+│   │   └── chat.ts               # Chat type definitions
 │   ├── utils/
+│   │   ├── chat-history.ts       # Chat history utilities
 │   │   └── supabase/
-│   │       ├── client.ts          # Cliente Supabase (browser)
-│   │       ├── server.ts          # Cliente Supabase (servidor)
-│   │       └── middleware.ts      # Middleware de autenticação
-│   └── middleware.ts              # Middleware global do Next.js
-├── src/
-│   └── components/                # Componentes reutilizáveis
-│       └── ChatWidget.tsx         # Widget de chat flutuante
-├── public/                        # Arquivos estáticos
-├── package.json                   # Dependências e scripts
-├── tsconfig.json                  # Configuração TypeScript
-├── postcss.config.mjs             # Configuração PostCSS com Tailwind
-├── eslint.config.mjs              # Configuração ESLint
-├── next.config.ts                 # Configuração Next.js
-└── README.md                      # Documentação do projeto
+│   │       ├── client.ts         # Supabase client (browser)
+│   │       ├── server.ts         # Supabase client (server)
+│   │       └── middleware.ts     # Authentication middleware
+│   └── middleware.ts             # Global Next.js middleware
+├── public/                       # Static files
+├── package.json                  # Dependencies and scripts
+├── tsconfig.json                 # TypeScript configuration
+├── postcss.config.mjs            # PostCSS configuration with Tailwind
+├── eslint.config.mjs             # ESLint configuration
+├── next.config.ts                # Next.js configuration
+└── README.md                     # Project documentation
 ```
 
-## 🎯 Funcionalidades
+## 🎯 Features
 
-### **🔐 Autenticação**
+### **🌐 Multi-language Support**
 
-- Login seguro com email e senha via Supabase Auth
-- Sessões persistentes com cookies httpOnly
-- Redirecionamento automático baseado no estado de autenticação
-- Middleware de proteção de rotas
+- **Language Toggle**: Button to switch between English and Portuguese
+- **Default Language**: English (can be changed by user preference)
+- **Persistent Selection**: Language preference saved in localStorage
+- **Complete Translation**: All UI elements, messages, and placeholders
+- **Responsive Design**: Language toggle integrated into all pages
 
-### **📝 Gerenciamento de Tarefas**
+### **🔐 Authentication**
 
-- **Criar**: Adicionar novas tarefas com título e descrição
-- **Visualizar**: Lista organizada com filtros (todas, pendentes, concluídas)
-- **Editar**: Modificar tarefas existentes inline
-- **Deletar**: Remover tarefas com confirmação
-- **Alternar Status**: Marcar como concluída/pendente
-- **Expansão**: Visualizar descrições completas ou truncadas
+- Secure login with email and password via Supabase Auth
+- Persistent sessions with httpOnly cookies
+- Automatic redirection based on authentication state
+- Route protection middleware
 
-### **🤖 Enriquecimento com IA**
+### **📝 Task Management**
 
-- **Botão de melhoria**: Botão "🤖 Melhorar com IA" nos formulários
-- **Descrição inteligente**: IA analisa título e descrição para criar versão melhorada
-- **Controle manual**: Usuário decide quando usar a IA
-- **Feedback visual**: Estados de carregamento durante processamento
-- **Pré-visualização**: Usuário vê descrição gerada antes de salvar
-- **Suporte a Markdown**: Descrições geradas incluem formatação rica
+- **Create**: Add new tasks with title and description
+- **View**: Organized list with filters (all, pending, completed)
+- **Edit**: Modify existing tasks inline
+- **Delete**: Remove tasks with confirmation
+- **Toggle Status**: Mark as completed/pending
+- **Expand**: View full or truncated descriptions
 
-### **💬 Chat Inteligente**
+### **🤖 AI Enhancement**
 
-- **Assistente virtual**: Chat completo com IA para dúvidas sobre a aplicação
-- **Contexto inteligente**: IA entende o histórico da conversa
-- **Respostas personalizadas**: Explicações detalhadas sobre funcionalidades
-- **Widget flutuante**: Chat rápido disponível em todas as páginas
-- **Fallback inteligente**: Funciona mesmo sem IA configurada
-- **Interface WhatsApp**: Design familiar e intuitivo
+- **Improvement Button**: "🤖 Improve with AI" button in forms
+- **Smart Description**: AI analyzes title and description to create improved version
+- **Manual Control**: User decides when to use AI
+- **Visual Feedback**: Loading states during processing
+- **Preview**: User sees generated description before saving
+- **Markdown Support**: Generated descriptions include rich formatting
 
-### **📊 Dashboard Inteligente**
+### **💬 Smart Chat**
 
-- Estatísticas em tempo real
-- Filtros visuais por status
-- Interface responsiva (mobile-first)
-- Estados de loading e feedback visual
-- Design moderno com micro-interações
-- Suporte a Markdown nas descrições
+- **Virtual Assistant**: Complete chat with AI for application questions
+- **Smart Context**: AI understands conversation history
+- **Personalized Responses**: Detailed explanations about features
+- **Floating Widget**: Quick chat available on all pages
+- **Smart Fallback**: Works even without AI configured
+- **WhatsApp Interface**: Familiar and intuitive design
 
-### **🔒 Segurança**
+### **📊 Smart Dashboard**
 
-- Row Level Security (RLS) no Supabase
-- Verificação de autenticação em todas as operações
-- Proteção CSRF com Server Actions
-- Validação de dados no servidor
+- Real-time statistics
+- Visual filters by status
+- Responsive interface (mobile-first)
+- Loading states and visual feedback
+- Modern design with micro-interactions
+- Markdown support in descriptions
 
-## ⚙️ Configuração do Ambiente
+### **🔒 Security**
 
-### **Pré-requisitos**
+- Row Level Security (RLS) in Supabase
+- Authentication verification in all operations
+- CSRF protection with Server Actions
+- Server-side data validation
+
+## ⚙️ Environment Setup
+
+### **Prerequisites**
 
 - Node.js 18+
-- npm, yarn, pnpm ou bun
-- Conta no Supabase
-- Chave da API OpenAI (para funcionalidade de IA)
+- npm, yarn, pnpm or bun
+- Supabase account
+- OpenAI API key (for AI functionality)
 
-### **1. Clone o repositório**
+### **1. Clone the repository**
 
 ```bash
-git clone <url-do-repositorio>
+git clone <repository-url>
 cd todo-ia
 ```
 
-### **2. Instale as dependências**
+### **2. Install dependencies**
 
 ```bash
 npm install
-# ou
+# or
 yarn install
-# ou
+# or
 pnpm install
-# ou
+# or
 bun install
 ```
 
-### **3. Configure as variáveis de ambiente**
+### **3. Configure environment variables**
 
-Crie um arquivo `.env.local` na raiz do projeto:
+Create a `.env.local` file in the project root:
 
 ```env
 # Supabase
-NEXT_PUBLIC_SUPABASE_URL=https://sua-url.supabase.co
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sua-chave-publica
+NEXT_PUBLIC_SUPABASE_URL=https://your-url.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-public-key
 
-# OpenAI (para enriquecimento com IA)
-OPENAI_API_KEY=sua-chave-da-openai
+# OpenAI (for AI enhancement)
+OPENAI_API_KEY=your-openai-key
 ```
 
-> **Nota**: A funcionalidade de IA é opcional. Se a chave da OpenAI não estiver configurada, o sistema funcionará normalmente sem o enriquecimento automático.
+> **Note**: AI functionality is optional. If the OpenAI key is not configured, the system will work normally without automatic enhancement.
 
-### **4. Configure o banco de dados Supabase**
+### **4. Configure Supabase database**
 
-Execute o seguinte SQL no editor SQL do Supabase:
+Run the following SQL in the Supabase SQL editor:
 
 ```sql
--- Criar tabela todos
+-- Create todos table
 CREATE TABLE todos (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -197,167 +218,182 @@ CREATE TABLE todos (
   inserted_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Habilitar RLS
+-- Enable RLS
 ALTER TABLE todos ENABLE ROW LEVEL SECURITY;
 
--- Política para usuários autenticados
-CREATE POLICY "Usuários podem gerenciar suas próprias tarefas"
+-- Policy for authenticated users
+CREATE POLICY "Users can manage their own tasks"
 ON todos
 FOR ALL
 USING (auth.uid() = user_id);
 
--- Índices para performance
+-- Performance indexes
 CREATE INDEX idx_todos_user_id ON todos(user_id);
 CREATE INDEX idx_todos_inserted_at ON todos(inserted_at DESC);
 ```
 
-### **5. Execute o projeto**
+### **5. Run the project**
 
 ```bash
 npm run dev
-# ou
+# or
 yarn dev
-# ou
+# or
 pnpm dev
-# ou
+# or
 bun dev
 ```
 
-Abra [http://localhost:3000](http://localhost:3000) no navegador.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## 📱 Como Usar
+## 📱 How to Use
 
-### **1. Acesso**
+### **1. Language Selection**
 
-- Acesse a aplicação em `http://localhost:3000`
-- Faça login com suas credenciais
-- Será redirecionado para o dashboard
+- Use the language toggle button (🇺🇸 EN / 🇧🇷 PT) in the top navigation
+- Available on all pages: home, login, dashboard, and chat
+- Preference is automatically saved
+- Interface updates immediately
 
-### **2. Gerenciar Tarefas**
+### **2. Access**
 
-- **Criar**:
-  1. Preencha o título da tarefa
-  2. Opcionalmente, digite uma descrição inicial
-  3. Clique em "🤖 Melhorar com IA" para enriquecer a descrição
-  4. Revise a descrição gerada
-  5. Clique em "Adicionar Tarefa" para salvar
-- **Filtrar**: Use os botões "Todas", "Pendentes", "Concluídas"
-- **Editar**:
-  1. Clique no ícone ✏️ da tarefa
-  2. Modifique título ou descrição
-  3. Use "🤖 Melhorar com IA" para aprimorar
-  4. Clique em "💾 Salvar" para confirmar
-- **Completar**: Clique no círculo ao lado da tarefa
-- **Deletar**: Clique no ícone 🗑️ (com confirmação)
-- **Expandir**: Clique para ver descrição completa
+- Access the application at `http://localhost:3000`
+- Default language is English
+- Login with your credentials
+- You'll be redirected to the dashboard
 
-### **3. Enriquecimento com IA**
+### **3. Task Management**
 
-- **Ativação manual**: Clique no botão "🤖 Melhorar com IA"
-- **Disponível em**: Formulário de criação e modo de edição
-- **Processo**:
-  1. IA analisa título e descrição atual
-  2. Gera versão melhorada e mais detalhada
-  3. Usuário revisa antes de salvar
-- **Requisitos**: Título obrigatório para usar a IA
-- **Formato**: Descrições geradas incluem Markdown para melhor organização
+- **Create**:
+  1. Fill in the task title
+  2. Optionally, enter an initial description
+  3. Click "🤖 Improve with AI" to enhance the description
+  4. Review the generated description
+  5. Click "Add Task" to save
+- **Filter**: Use "All", "Pending", "Completed" buttons
+- **Edit**:
+  1. Click the ✏️ icon on the task
+  2. Modify title or description
+  3. Use "🤖 Improve with AI" to enhance
+  4. Click "💾 Save" to confirm
+- **Complete**: Click the circle next to the task
+- **Delete**: Click the 🗑️ icon (with confirmation)
+- **Expand**: Click to see full description
 
-### **4. Chat Inteligente**
+### **4. AI Enhancement**
 
-- **Chat completo**: Acesse `/chat` para conversa completa com IA
-- **Widget flutuante**: Botão flutuante no dashboard para chat rápido
-- **Contexto inteligente**: IA lembra do histórico da conversa
-- **Respostas personalizadas**: Explicações sobre funcionalidades da aplicação
-- **Fallback inteligente**: Funciona mesmo sem IA configurada
+- **Manual Activation**: Click the "🤖 Improve with AI" button
+- **Available in**: Creation form and edit mode
+- **Process**:
+  1. AI analyzes current title and description
+  2. Generates improved and more detailed version
+  3. User reviews before saving
+- **Requirements**: Title required to use AI
+- **Format**: Generated descriptions include Markdown for better organization
 
-### **5. Dashboard**
+### **5. Smart Chat**
 
-- Visualize estatísticas em tempo real
-- Acompanhe progresso das tarefas
-- Interface otimizada para produtividade
-- Descrições enriquecidas pela IA para melhor contexto
-- Suporte completo a Markdown nas descrições
+- **Complete Chat**: Access `/chat` for full AI conversation
+- **Floating Widget**: Floating button in dashboard for quick chat
+- **Smart Context**: AI remembers conversation history
+- **Personalized Responses**: Explanations about application features
+- **Smart Fallback**: Works even without AI configured
 
-## 🤖 Exemplos de Enriquecimento com IA
+### **6. Dashboard**
 
-### **Entrada do Usuário:**
+- View real-time statistics
+- Track task progress
+- Interface optimized for productivity
+- AI-enriched descriptions for better context
+- Complete Markdown support in descriptions
+
+## 🤖 AI Enhancement Examples
+
+### **User Input:**
+
 ```
-Título: "Estudar React"
-Descrição atual: "Revisar conceitos básicos"
+Title: "Study React"
+Current Description: "Review basic concepts"
 ```
 
-### **Depois de clicar em "🤖 Melhorar com IA" (com suporte a Markdown):**
+### **After clicking "🤖 Improve with AI" (with Markdown support):**
 
 ```markdown
-## Objetivo
-Aprofundar conhecimentos em **React** para desenvolvimento web moderno, partindo da revisão de conceitos fundamentais.
+## Objective
 
-### Plano de estudo estruturado:
+Deepen knowledge in **React** for modern web development, starting from reviewing fundamental concepts.
 
-#### 1. Conceitos Básicos (Revisão)
-- Components funcionais e de classe
-- Props e PropTypes  
-- State management básico
+### Structured study plan:
+
+#### 1. Basic Concepts (Review)
+
+- Functional and class components
+- Props and PropTypes
+- Basic state management
 - Event handling
 
-#### 2. Hooks Essenciais
-- `useState` para gerenciamento de estado
-- `useEffect` para efeitos colaterais
-- `useContext` para compartilhamento de dados
-- Custom hooks para lógica reutilizável
+#### 2. Essential Hooks
 
-#### 3. Prática Aplicada
-1. Criar um projeto todo-list simples
-2. Implementar CRUD operations
-3. Adicionar validação de formulários
+- `useState` for state management
+- `useEffect` for side effects
+- `useContext` for data sharing
+- Custom hooks for reusable logic
 
-> **Dica**: Pratique codificando junto com tutoriais para fixar melhor o aprendizado.
+#### 3. Applied Practice
 
-**Recursos recomendados:**
-- [Documentação oficial do React](https://react.dev)
+1. Create a simple todo-list project
+2. Implement CRUD operations
+3. Add form validation
+
+> **Tip**: Practice coding along with tutorials to better retain learning.
+
+**Recommended Resources:**
+
+- [Official React Documentation](https://react.dev)
 - React Developer Tools
-- Projetos práticos no CodeSandbox
+- Practical projects on CodeSandbox
 
-**Tempo estimado:** 2-3 semanas (1-2h/dia)
+**Estimated Time:** 2-3 weeks (1-2h/day)
 ```
 
-### **Funcionalidades de Markdown Suportadas:**
-- ✅ **Títulos** (`#`, `##`, `###`)
-- ✅ **Texto em negrito** (`**texto**`)
-- ✅ **Texto em itálico** (`*texto*`)  
-- ✅ **Listas ordenadas** (`1. item`)
-- ✅ **Listas não ordenadas** (`- item`)
-- ✅ **Código inline** (`código`)
-- ✅ **Blocos de código** (```código```)
-- ✅ **Citações** (`> texto`)
-- ✅ **Links** (`[texto](url)`)
-- ✅ **Tabelas** (GitHub Flavored Markdown)
+### **Supported Markdown Features:**
 
-## 📝 Scripts Disponíveis
+- ✅ **Headers** (`#`, `##`, `###`)
+- ✅ **Bold text** (`**text**`)
+- ✅ **Italic text** (`*text*`)
+- ✅ **Ordered lists** (`1. item`)
+- ✅ **Unordered lists** (`- item`)
+- ✅ **Inline code** (`code`)
+- ✅ **Code blocks** (`code`)
+- ✅ **Quotes** (`> text`)
+- ✅ **Links** (`[text](url)`)
+- ✅ **Tables** (GitHub Flavored Markdown)
+
+## 📝 Available Scripts
 
 ```bash
-# Desenvolvimento
+# Development
 npm run dev
 
-# Build para produção
+# Production build
 npm run build
 
-# Executar build de produção
+# Run production build
 npm run start
 
-# Verificar qualidade do código
+# Check code quality
 npm run lint
 ```
 
-## 🌐 Deploy
+## 🌐 Deployment
 
-### **Vercel (Recomendado)**
+### **Vercel (Recommended)**
 
-1. Conecte seu repositório no [Vercel](https://vercel.com)
-2. Configure as variáveis de ambiente
-3. Deploy automático em cada commit
+1. Connect your repository on [Vercel](https://vercel.com)
+2. Configure environment variables
+3. Automatic deployment on each commit
 
-### **Outras Plataformas**
+### **Other Platforms**
 
 - Netlify
 - Railway
@@ -366,105 +402,113 @@ npm run lint
 
 ## 🔧 Troubleshooting
 
-### **Problema: IA não está funcionando**
+### **Problem: AI not working**
 
-1. **Verifique a chave da API:**
+1. **Check API key:**
 
    ```bash
-   # No arquivo .env.local
+   # In .env.local file
    OPENAI_API_KEY=sk-proj-...
    ```
 
-2. **Verifique os logs do servidor:**
+2. **Check server logs:**
 
-   - Abra o terminal de desenvolvimento
-   - Procure por erros relacionados à OpenAI
+   - Open development terminal
+   - Look for OpenAI-related errors
 
-3. **Teste a conectividade:**
-   - Verifique se a chave tem créditos disponíveis
-   - Confirme que a chave tem permissões para o modelo GPT-4o-mini
+3. **Test connectivity:**
+   - Check if key has available credits
+   - Confirm key has permissions for GPT-4o-mini model
 
-### **Problema: Descrições não aparecem**
+### **Problem: Descriptions not appearing**
 
-- A IA processa em background, aguarde alguns segundos
-- Recarregue a página se necessário
-- Verifique o console do navegador para erros
+- AI processes in background, wait a few seconds
+- Reload page if necessary
+- Check browser console for errors
 
-### **Fallback sem IA**
+### **Fallback without AI**
 
-Se a IA não estiver disponível:
+If AI is not available:
 
-- Use o toggle para desabilitar
-- Sistema funcionará normalmente sem enriquecimento
-- Descrições manuais continuam funcionando
+- Use toggle to disable
+- System will work normally without enhancement
+- Manual descriptions continue working
 
-## 🤝 Contribuição
+## 🤝 Contributing
 
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
-3. Commit suas mudanças (`git commit -m 'Adiciona nova feature'`)
-4. Push para a branch (`git push origin feature/nova-feature`)
-5. Abra um Pull Request
+1. Fork the project
+2. Create a branch for your feature (`git checkout -b feature/new-feature`)
+3. Commit your changes (`git commit -m 'Add new feature'`)
+4. Push to branch (`git push origin feature/new-feature`)
+5. Open a Pull Request
 
-## 📋 Estrutura do Banco de Dados
+## 📋 Database Structure
 
-### **Tabela: todos**
+### **Table: todos**
 
-| Campo         | Tipo      | Descrição                           |
-| ------------- | --------- | ----------------------------------- |
-| `id`          | BIGINT    | Chave primária (auto-incremento)    |
-| `user_id`     | UUID      | Referência ao usuário autenticado   |
-| `task`        | TEXT      | Título da tarefa (obrigatório)      |
-| `description` | TEXT      | Descrição opcional da tarefa        |
-| `is_complete` | BOOLEAN   | Status de conclusão (padrão: false) |
-| `inserted_at` | TIMESTAMP | Data/hora de criação                |
+| Field         | Type      | Description                        |
+| ------------- | --------- | ---------------------------------- |
+| `id`          | BIGINT    | Primary key (auto-increment)       |
+| `user_id`     | UUID      | Reference to authenticated user    |
+| `task`        | TEXT      | Task title (required)              |
+| `description` | TEXT      | Optional task description          |
+| `is_complete` | BOOLEAN   | Completion status (default: false) |
+| `inserted_at` | TIMESTAMP | Creation date/time                 |
 
-## 🔧 Arquitetura
+## 🔧 Architecture
+
+### **Internationalization**
+
+- **React Context**: `LanguageContext` for global state management
+- **Local Storage**: Persistent language preference storage
+- **Translation Object**: Complete translations for EN/PT
+- **Component Integration**: `LanguageToggle` component in all layouts
+- **Default Language**: English (as requested)
 
 ### **Server Actions**
 
-- Todas as operações CRUD executam no servidor
-- Segurança e performance otimizadas
-- Revalidação automática de cache
-- Processamento assíncrono de IA em background
+- All CRUD operations execute on server
+- Optimized security and performance
+- Automatic cache revalidation
+- Asynchronous AI processing in background
 
-### **Middleware de Autenticação**
+### **Authentication Middleware**
 
-- Proteção de rotas sensíveis
-- Gerenciamento de sessões
-- Redirecionamento inteligente
+- Sensitive route protection
+- Session management
+- Smart redirection
 
-### **Componentes Reutilizáveis**
+### **Reusable Components**
 
-- Interface modular e escalável
-- TypeScript para tipagem segura
-- Tailwind CSS 4 para estilização consistente
-- Integração inteligente com IA
+- Modular and scalable interface
+- TypeScript for safe typing
+- Tailwind CSS 4 for consistent styling
+- Smart AI integration
 
-### **Inteligência Artificial**
+### **Artificial Intelligence**
 
-- **OpenAI GPT-4o-mini**: Modelo otimizado para velocidade e custo
-- **Prompt Engineering**: Sistema otimizado para gerar descrições úteis
-- **Processamento Assíncrono**: Não bloqueia a interface do usuário
-- **Fallback Gracioso**: Sistema funciona mesmo sem IA configurada
-- **Suporte a Markdown**: Descrições geradas incluem formatação rica
-- **Chat Inteligente**: Assistente virtual com contexto de conversa
-- **Respostas Contextuais**: IA entende o histórico da conversa
+- **OpenAI GPT-4o-mini**: Model optimized for speed and cost
+- **Prompt Engineering**: Optimized system for generating useful descriptions
+- **Asynchronous Processing**: Doesn't block user interface
+- **Graceful Fallback**: System works even without AI configured
+- **Markdown Support**: Generated descriptions include rich formatting
+- **Smart Chat**: Virtual assistant with conversation context
+- **Contextual Responses**: AI understands conversation history
 
 ### **Tailwind CSS 4**
 
-- **Configuração moderna**: Usando PostCSS e configuração nativa
-- **Typography plugin**: Suporte avançado para tipografia
-- **Design system**: Componentes consistentes e responsivos
-- **Mobile-first**: Interface otimizada para dispositivos móveis
+- **Modern Configuration**: Using PostCSS and native configuration
+- **Typography Plugin**: Advanced typography support
+- **Design System**: Consistent and responsive components
+- **Mobile-First**: Interface optimized for mobile devices
 
-## 📞 Suporte
+## 📞 Support
 
-Para dúvidas, problemas ou sugestões:
+For questions, problems or suggestions:
 
-- Abra uma issue no repositório
-- Entre em contato com a equipe de desenvolvimento
+- Open an issue in the repository
+- Contact the development team
 
 ---
 
-**Desenvolvido por David Brigido**
+**Developed by David Brigido**
