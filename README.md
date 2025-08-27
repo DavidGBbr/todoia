@@ -71,15 +71,13 @@ todo-ia/
 │   │   ├── globals.css            # Global styles with Tailwind CSS 4
 │   │   └── favicon.ico            # Application icon
 │   ├── components/
-│   │   ├── ChatWidget.tsx         # Floating chat widget
-│   │   ├── ChatStats.tsx          # Chat statistics component
+│   │   ├── WhatsAppButton.tsx     # WhatsApp contact button
 │   │   ├── N8NStatus.tsx          # N8N status component
 │   │   └── LanguageToggle.tsx     # Language switcher component
 │   ├── contexts/
 │   │   └── LanguageContext.tsx    # Internationalization context
 │   ├── hooks/
-│   │   ├── useChatHistory.ts      # Chat history hook
-│   │   └── useIsClient.ts         # Client-side detection hook
+│   │   └── useChatHistory.ts      # Chat history hook
 │   ├── services/
 │   │   └── n8n-chat.ts           # N8N chat service
 │   ├── types/

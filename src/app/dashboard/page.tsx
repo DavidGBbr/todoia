@@ -613,8 +613,8 @@ const DashboardPage = () => {
                                   className="mt-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium cursor-pointer"
                                 >
                                   {expandedTodos.has(todo.id)
-                                    ? "Ver menos"
-                                    : "Ver mais"}
+                                    ? "See lees"
+                                    : "See more"}
                                 </button>
                               )}
                             </div>
