@@ -14,7 +14,7 @@ const getOpenAIClient = () => {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     throw new Error(
-      "OPENAI_API_KEY não está configurada nas variáveis de ambiente"
+      "OPENAI_API_KEY is not configured in environment variables"
     );
   }
   return new OpenAI({ apiKey });
@@ -36,7 +36,7 @@ export const createTodo = async (formData: FormData) => {
   };
 
   if (!data.task?.trim()) {
-    return { error: "Título da tarefa é obrigatório" };
+    return { error: "Task title is required" };
   }
 
   const { error } = await supabase.from("todos").insert({
@@ -48,7 +48,7 @@ export const createTodo = async (formData: FormData) => {
 
   if (error) {
     console.error("Error creating todo:", error);
-    return { error: "Erro ao criar tarefa" };
+    return { error: "Error creating task" };
   }
 
   revalidatePath("/dashboard");
@@ -63,31 +63,31 @@ export const improveTaskDescription = async (
     const openai = getOpenAIClient();
 
     const prompt = currentDescription
-      ? `Descrição atual: "${currentDescription}"
+      ? `Current description: "${currentDescription}"
          
-         Melhore e detalhe mais esta descrição, mantendo o foco no conteúdo sem repetir o título da tarefa.`
-      : `Crie uma descrição detalhada e útil para a atividade mencionada. Não repita o título, apenas elabore sobre como executar, passos necessários e dicas relevantes.`;
+         Improve and add more detail to this description, keeping the focus on content without repeating the task title.`
+      : `Create a detailed and useful description for the mentioned activity. Don't repeat the title, just elaborate on how to execute it, necessary steps and relevant tips.`;
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
-          content: `Você é um assistente especializado em organização e produtividade. 
-          Quando receber informações sobre uma tarefa, você deve:
-          1. Criar ou melhorar a descrição focando APENAS no conteúdo e execução
-          2. NÃO repita ou mencione o título da tarefa na descrição
-          3. Sugira subtarefas ou passos específicos para completá-la
-          4. Dê dicas práticas e detalhes relevantes
-          5. Mantenha um tom profissional mas acessível
+          content: `You are an assistant specialized in organization and productivity. 
+          When you receive information about a task, you should:
+          1. Create or improve the description focusing ONLY on content and execution
+          2. DO NOT repeat or mention the task title in the description
+          3. Suggest subtasks or specific steps to complete it
+          4. Give practical tips and relevant details
+          5. Maintain a professional but accessible tone
           
-          IMPORTANTE: Vá direto ao ponto sobre COMO fazer, não SOBRE O QUE é a tarefa.
-          Responda em português brasileiro, seja conciso mas informativo (máximo 300 palavras).
-          Use markdown para formatar a resposta de forma clara e organizada.`,
+          IMPORTANT: Go straight to the point about HOW to do it, not WHAT the task is about.
+          Respond in English, be concise but informative (maximum 300 words).
+          Use markdown to format the response clearly and organized.`,
         },
         {
           role: "user",
-          content: `Tarefa: "${task}"\n\n${prompt}`,
+          content: `Task: "${task}"\n\n${prompt}`,
         },
       ],
       max_tokens: 500,
@@ -100,7 +100,7 @@ export const improveTaskDescription = async (
       return {
         description: "",
         success: false,
-        error: "Resposta vazia da IA",
+        error: "Empty response from AI",
       };
     }
 
@@ -109,11 +109,11 @@ export const improveTaskDescription = async (
       success: true,
     };
   } catch (error) {
-    console.error("Erro ao melhorar descrição com IA:", error);
+    console.error("Error improving description with AI:", error);
     return {
       description: "",
       success: false,
-      error: error instanceof Error ? error.message : "Erro desconhecido",
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 };
@@ -139,7 +139,7 @@ export const updateTodo = async (
 
   if (error) {
     console.error("Error updating todo:", error);
-    return { error: "Erro ao atualizar tarefa" };
+    return { error: "Error updating task" };
   }
 
   revalidatePath("/dashboard");
@@ -164,7 +164,7 @@ export const deleteTodo = async (id: number) => {
 
   if (error) {
     console.error("Error deleting todo:", error);
-    return { error: "Erro ao deletar tarefa" };
+    return { error: "Error deleting task" };
   }
 
   revalidatePath("/dashboard");
@@ -192,11 +192,10 @@ export const toggleTodoComplete = async (
 
   if (error) {
     console.error("Error toggling todo:", error);
-    return { error: "Erro ao atualizar status da tarefa" };
+    return { error: "Error updating task status" };
   }
 
   revalidatePath("/dashboard");
-
 
   revalidatePath("/dashboard");
   return { success: true };
@@ -220,7 +219,7 @@ export const getTodos = async () => {
 
   if (error) {
     console.error("Error fetching todos:", error);
-    return { error: "Erro ao carregar tarefas" };
+    return { error: "Error loading tasks" };
   }
 
   return { data };

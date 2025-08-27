@@ -80,8 +80,8 @@ const DashboardPage = () => {
 
   const getFilterMessage = (filterType: "completed" | "pending") => {
     return filterType === "completed"
-      ? t("dashboard.no_tasks")
-      : t("dashboard.no_tasks");
+      ? t("dashboard.no_tasks_completed")
+      : t("dashboard.no_tasks_pending");
   };
 
   const toggleExpanded = (todoId: number) => {
@@ -125,7 +125,7 @@ const DashboardPage = () => {
 
   const handleImproveNewTask = async () => {
     if (!newTask.trim()) {
-      alert("Digite um título para a tarefa primeiro");
+      alert(t("dashboard.error_title_required"));
       return;
     }
 
@@ -144,13 +144,14 @@ const DashboardPage = () => {
         setNewDescription(result.description);
       } else {
         alert(
-          "Erro ao melhorar descrição: " + (result.error || "Erro desconhecido")
+          t("dashboard.error_improve") +
+            (result.error || t("dashboard.error_unknown"))
         );
       }
     } catch (error: unknown) {
       if (error instanceof Error && error.name !== "AbortError") {
-        console.error("Erro ao melhorar descrição:", error);
-        alert("Erro ao melhorar descrição");
+        console.error("Error improving description:", error);
+        alert(t("dashboard.error_improve"));
       }
     } finally {
       setIsImprovingNew(false);
@@ -192,13 +193,14 @@ const DashboardPage = () => {
         });
       } else {
         alert(
-          "Erro ao melhorar descrição: " + (result.error || "Erro desconhecido")
+          t("dashboard.error_improve") +
+            (result.error || t("dashboard.error_unknown"))
         );
       }
     } catch (error: unknown) {
       if (error instanceof Error && error.name !== "AbortError") {
-        console.error("Erro ao melhorar descrição:", error);
-        alert("Erro ao melhorar descrição");
+        console.error("Error improving description:", error);
+        alert(t("dashboard.error_improve"));
       }
     } finally {
       setIsImprovingEdit(false);
@@ -272,9 +274,7 @@ const DashboardPage = () => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-300">
-            Carregando suas tarefas...
-          </p>
+          <p className="text-gray-600 dark:text-gray-300">Loading...</p>
         </div>
       </div>
     );
@@ -336,7 +336,7 @@ const DashboardPage = () => {
           <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-white/20 dark:border-gray-700/50 shadow-xl p-8 mb-8">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                ✨ Adicionar Nova Tarefa
+                {t("dashboard.add_new_task")}
               </h2>
               <button
                 onClick={() => setShowAddForm(false)}
@@ -462,11 +462,11 @@ const DashboardPage = () => {
             <div className="text-center py-16 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-white/20 dark:border-gray-700/50 shadow-xl">
               <div className="text-6xl mb-6">📝</div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-                Nenhuma tarefa encontrada
+                {t("dashboard.no_tasks")}
               </h3>
               <p className="text-gray-600 dark:text-gray-300 text-lg">
                 {filter === "all"
-                  ? "Comece adicionando sua primeira tarefa inteligente!"
+                  ? t("dashboard.no_tasks_subtitle")
                   : getFilterMessage(filter)}
               </p>
               {filter !== "all" && (
@@ -474,7 +474,7 @@ const DashboardPage = () => {
                   onClick={() => setFilter("all")}
                   className="mt-4 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
                 >
-                  Ver todas as tarefas
+                  {t("dashboard.all_tasks")}
                 </button>
               )}
             </div>
@@ -501,7 +501,7 @@ const DashboardPage = () => {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                          Descrição
+                          {t("dashboard.task_description")}
                         </label>
                         <button
                           type="button"
@@ -520,8 +520,8 @@ const DashboardPage = () => {
                           <span>{isImprovingEdit ? "❌" : "🤖"}</span>
                           <span>
                             {isImprovingEdit
-                              ? "Improving..."
-                              : "Improve with IA"}
+                              ? t("dashboard.improving")
+                              : t("dashboard.improve_ai")}
                           </span>
                         </button>
                       </div>
@@ -533,7 +533,9 @@ const DashboardPage = () => {
                             description: e.target.value,
                           })
                         }
-                        placeholder="Digite uma descrição ou use o botão 'Melhorar com IA'..."
+                        placeholder={t(
+                          "dashboard.task_description_edit_placeholder"
+                        )}
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white bg-white dark:bg-gray-700 resize-none transition duration-200"
                         rows={3}
                       />
@@ -613,8 +615,8 @@ const DashboardPage = () => {
                                   className="mt-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium cursor-pointer"
                                 >
                                   {expandedTodos.has(todo.id)
-                                    ? "See lees"
-                                    : "See more"}
+                                    ? t("dashboard.see_less")
+                                    : t("dashboard.see_more")}
                                 </button>
                               )}
                             </div>
