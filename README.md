@@ -37,9 +37,17 @@ A modern task management application built with Next.js 15, Supabase and TypeScr
 
 ### **Artificial Intelligence**
 
-- **[OpenAI API](https://openai.com/)** - GPT-4o-mini for automatic enhancement
+- **[OpenAI API](https://openai.com/)** - GPT-4o-mini for automatic enhancement and chat
 - **Server Actions** - Asynchronous server processing
 - **Prompt Engineering** - Optimized system for generating useful descriptions
+- **[Tavily Search API](https://tavily.com/)** - Internet search capabilities for N8N workflows
+
+### **Automation & Integration**
+
+- **[N8N](https://n8n.io/)** - Workflow automation platform
+- **[Evolution API](https://evolution-api.com/)** - WhatsApp integration service
+- **PostgreSQL Memory** - Chat history persistence for N8N workflows
+- **Webhook Integration** - Real-time message processing
 
 ### **Development Tools**
 
@@ -47,6 +55,63 @@ A modern task management application built with Next.js 15, Supabase and TypeScr
 - **PostCSS** - CSS processor with Tailwind CSS 4
 - **React Markdown** - Markdown content rendering
 - **remark-gfm** - GitHub Flavored Markdown support
+
+## 🤖 N8N Workflows Architecture
+
+The application uses two main N8N workflows to provide WhatsApp integration and intelligent task management:
+
+### **1. TodoAI Workflow (Main Orchestrator)**
+
+**Purpose**: Complete orchestration and user interaction via WhatsApp, performing CRUD operations on task lists and handling search requests.
+
+**Key Features**:
+
+- 📱 **WhatsApp Integration** - Receives and responds to user messages via Evolution API
+- 🧠 **AI Agent** - Powered by OpenAI GPT-4o-mini with specialized task management prompts
+- 💾 **Memory Management** - PostgreSQL-based chat history for context preservation
+- 🔧 **CRUD Operations** - Full task management (Create, Read, Update, Delete) via Supabase
+- 🔍 **Search Integration** - Delegates internet searches to the Search Agent workflow
+- ✅ **Message Handling** - Automatic message reading and response functionality
+
+**Workflow Components**:
+
+- **Webhook** - Receives WhatsApp messages
+- **AI Agent** - Processes requests and determines actions
+- **Supabase Tools** - Handles database operations (Create, Read, Update, Delete)
+- **Search Tool** - Calls the Search Agent workflow for internet queries
+- **Evolution API** - Manages WhatsApp message sending and status updates
+- **Memory System** - Maintains conversation context per user
+
+### **2. Search Agent Workflow (Internet Search)**
+
+**Purpose**: Performs detailed internet searches based on terms requested by the main workflow.
+
+**Key Features**:
+
+- 🔍 **Internet Search** - Uses Tavily Search API for comprehensive web searches
+- 🤖 **AI-Powered Results** - GPT-4o-mini processes and formats search results
+- 📄 **Detailed Responses** - Returns formatted, relevant information in four detailed paragraphs
+- 🔗 **Workflow Integration** - Designed to be called by other workflows
+
+**Workflow Components**:
+
+- **Workflow Trigger** - Receives search requests from parent workflows
+- **Search Agent** - AI agent specialized in internet search
+- **Tavily Search Tool** - Performs actual web searches
+- **OpenAI Chat Model** - Processes and formats search results
+
+### **Integration Flow**
+
+```
+User WhatsApp Message → TodoAI Webhook → AI Agent Analysis
+                                            ↓
+                                   Decision Branch:
+                                   ├── Task Management → Supabase CRUD
+                                   ├── General Question → Direct AI Response
+                                   └── Search Request → Search Agent Workflow
+                                            ↓
+                              Formatted Response → WhatsApp User
+```
 
 ## 📁 Project Structure
 
@@ -142,7 +207,20 @@ todo-ia/
 - **Smart Fallback**: Works even without AI configured
 - **WhatsApp Interface**: Familiar and intuitive design
 
-### **📊 Smart Dashboard**
+### **� WhatsApp Integration (N8N)**
+
+- **Complete WhatsApp Bot**: Full task management via WhatsApp messages
+- **Natural Language Processing**: AI understands user intentions in Portuguese/English
+- **CRUD Operations**: Create, read, update, and delete tasks via chat commands
+- **Smart Task Grouping**: Automatically groups related task details into single tasks
+- **Internet Search**: Performs web searches when requested by users
+- **Conversation Memory**: Maintains chat history and context per user
+- **Auto Message Management**: Automatically marks messages as read and responds
+- **Flexible Commands**: Supports natural language like "Add task: Buy bread" or "What are my tasks?"
+- **Task References**: Smart handling of task references like "this task" or "the last task"
+- **Confirmation System**: Confirms all operations with friendly messages
+
+### **�📊 Smart Dashboard**
 
 - Real-time statistics
 - Visual filters by status
@@ -166,6 +244,9 @@ todo-ia/
 - npm, yarn, pnpm or bun
 - Supabase account
 - OpenAI API key (for AI functionality)
+- N8N instance (for WhatsApp integration)
+- Evolution API or similar WhatsApp API service
+- Tavily Search API key (for internet search functionality)
 
 ### **1. Clone the repository**
 
@@ -197,9 +278,13 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-public-key
 
 # OpenAI (for AI enhancement)
 OPENAI_API_KEY=your-openai-key
+
+# N8N (for WhatsApp integration)
+N8N_WEBHOOK_URL=https://your-n8n-instance.com/webhook/your-webhook-id
+N8N_API_KEY=your-n8n-api-key
 ```
 
-> **Note**: AI functionality is optional. If the OpenAI key is not configured, the system will work normally without automatic enhancement.
+> **Note**: AI functionality and WhatsApp integration are optional. The system will work normally without these configurations, but with limited features.
 
 ### **4. Configure Supabase database**
 
@@ -230,7 +315,42 @@ CREATE INDEX idx_todos_user_id ON todos(user_id);
 CREATE INDEX idx_todos_inserted_at ON todos(inserted_at DESC);
 ```
 
-### **5. Run the project**
+### **5. Configure N8N Workflows (Optional - for WhatsApp integration)**
+
+If you want to enable WhatsApp integration, you'll need to set up the N8N workflows:
+
+#### **Setup Requirements:**
+
+- N8N instance (self-hosted or cloud)
+- Evolution API or similar WhatsApp API service
+- OpenAI API access
+- Tavily Search API key
+- PostgreSQL database for chat memory
+
+#### **Import Workflows:**
+
+1. Import the `todoai.json` workflow into your N8N instance
+2. Import the `Search agent.json` workflow into your N8N instance
+3. Configure the credentials for:
+   - Supabase API (same as your main app)
+   - OpenAI API (same as your main app)
+   - Evolution API (for WhatsApp)
+   - Tavily Search API (for internet search)
+   - PostgreSQL (for chat memory storage)
+
+#### **Configure Webhooks:**
+
+1. In the TodoAI workflow, copy the webhook URL
+2. Configure your WhatsApp API service to send messages to this webhook
+3. Update the webhook URL in your application environment variables
+
+#### **Test the Integration:**
+
+1. Send a message to your WhatsApp number
+2. Verify the workflow processes the message
+3. Check that responses are sent back via WhatsApp
+
+### **6. Run the project**
 
 ```bash
 npm run dev
@@ -297,7 +417,41 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 - **Personalized Responses**: Explanations about application features
 - **Smart Fallback**: Works even without AI configured
 
-### **6. Dashboard**
+### **6. WhatsApp Integration**
+
+If you have configured the N8N workflows, you can manage your tasks directly via WhatsApp:
+
+#### **Task Management Commands:**
+
+- **Create**: "Add task: Buy groceries" or "I need to study React"
+- **List**: "What are my tasks?" or "Show me today's tasks"
+- **Update**: "Mark 'Buy groceries' as complete" or "Update the last task"
+- **Delete**: "Remove task 2" or "Delete the task 'Buy groceries'"
+
+#### **Smart Features:**
+
+- **Natural Language**: Use natural commands in Portuguese or English
+- **Task Grouping**: Related details are automatically grouped into single tasks
+- **Context Awareness**: Reference tasks with "this task" or "the last task"
+- **Search**: Ask questions like "How to learn React?" for internet search
+- **Confirmations**: All operations are confirmed with friendly messages
+
+#### **Example Conversation:**
+
+```
+User: "Add task: Prepare presentation for Monday"
+Bot: "Done! ✅ The task *Prepare presentation for Monday* has been added to your list."
+
+User: "I need to research market trends and create slides"
+Bot: "Perfect! ✅ I've updated the task to include the details: *Prepare presentation for Monday (research market trends and create slides)*."
+
+User: "What are my tasks?"
+Bot: "Here are your tasks:
+1. Prepare presentation for Monday (research market trends and create slides) 📊
+2. Buy groceries 🛒"
+```
+
+### **7. Dashboard**
 
 - View real-time statistics
 - Track task progress
@@ -480,6 +634,48 @@ If AI is not available:
 
 - Modular and scalable interface
 - TypeScript for safe typing
+
+### **N8N Workflows Architecture**
+
+#### **TodoAI Workflow Structure:**
+
+```
+WhatsApp Webhook → Edit Fields → AI Agent
+                                    ↓
+                    ┌─────────────────┼─────────────────┐
+                    ▼                 ▼                 ▼
+                Supabase CRUD    Search Agent      Direct Response
+                (Create/Read/    (Internet Search)  (AI Conversation)
+                Update/Delete)        ↓                 ↓
+                    ↓                 ▼                 ▼
+                    └────────→ Evolution API ←─────────┘
+                              (WhatsApp Response)
+```
+
+#### **Search Agent Workflow Structure:**
+
+```
+Workflow Trigger → Search Agent → Tavily Search Tool
+                      ↓
+                OpenAI Processing → Formatted Response
+```
+
+#### **Data Flow:**
+
+1. **User Message** → WhatsApp → Evolution API → N8N Webhook
+2. **Message Processing** → AI Agent analyzes intent
+3. **Action Decision**:
+   - Task CRUD → Supabase operations
+   - Search Query → Search Agent workflow
+   - General Chat → Direct AI response
+4. **Response Generation** → Evolution API → WhatsApp → User
+
+#### **Memory Management:**
+
+- PostgreSQL stores chat history per user
+- Context window of 10 messages
+- Session management by user ID
+- Persistent conversation state
 - Tailwind CSS 4 for consistent styling
 - Smart AI integration
 
