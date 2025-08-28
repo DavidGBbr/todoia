@@ -82,6 +82,10 @@ The application uses two main N8N workflows to provide WhatsApp integration and 
 - **Evolution API** - Manages WhatsApp message sending and status updates
 - **Memory System** - Maintains conversation context per user
 
+**Visual Workflow:**
+
+![TodoAI Workflow](./public/assets/todoai-agent.png)
+
 ### **2. Search Agent Workflow (Internet Search)**
 
 **Purpose**: Performs detailed internet searches based on terms requested by the main workflow.
@@ -100,6 +104,10 @@ The application uses two main N8N workflows to provide WhatsApp integration and 
 - **Tavily Search Tool** - Performs actual web searches
 - **OpenAI Chat Model** - Processes and formats search results
 
+**Visual Workflow:**
+
+![Search Agent Workflow](./public/assets/search-agent.png)
+
 ### **Integration Flow**
 
 ```
@@ -112,6 +120,15 @@ User WhatsApp Message → TodoAI Webhook → AI Agent Analysis
                                             ↓
                               Formatted Response → WhatsApp User
 ```
+
+### **Workflow Visual Architecture**
+
+The diagrams above demonstrate the complete N8N workflow structure:
+
+1. **TodoAI Workflow**: Shows the main orchestration with WhatsApp integration, AI agent processing, and all CRUD operations
+2. **Search Agent Workflow**: Displays the specialized search functionality with Tavily integration and AI-powered result formatting
+
+These visual representations help understand the flow of data and the relationships between different components in the automation system.
 
 ## 📁 Project Structure
 
@@ -155,6 +172,10 @@ todo-ia/
 │   │       └── middleware.ts     # Authentication middleware
 │   └── middleware.ts             # Global Next.js middleware
 ├── public/                       # Static files
+│   ├── assets/                   # Images and visual resources
+│   │   ├── todoai-agent.png      # TodoAI N8N workflow diagram
+│   │   └── search-agent.png      # Search Agent N8N workflow diagram
+│   └── *.svg                     # Other static assets
 ├── package.json                  # Dependencies and scripts
 ├── tsconfig.json                 # TypeScript configuration
 ├── postcss.config.mjs            # PostCSS configuration with Tailwind
@@ -337,6 +358,8 @@ If you want to enable WhatsApp integration, you'll need to set up the N8N workfl
    - Evolution API (for WhatsApp)
    - Tavily Search API (for internet search)
    - PostgreSQL (for chat memory storage)
+
+> **Note**: The visual diagrams above show the complete workflow structure with all nodes and connections. These workflows provide the foundation for WhatsApp integration and intelligent task management.
 
 #### **Configure Webhooks:**
 
