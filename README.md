@@ -17,6 +17,7 @@ A modern task management application built with Next.js 15, Supabase and TypeScr
 - 📱 **Responsive design** mobile-first with Tailwind CSS 4
 - 📝 **Markdown support** with React Markdown and remark-gfm
 - 🌐 **Multi-language support** (English/Portuguese) with language toggle
+- 📥 **Ready-to-use N8N workflows** for WhatsApp integration (downloadable)
 
 ## 🛠️ Technology Stack
 
@@ -130,6 +131,34 @@ The diagrams above demonstrate the complete N8N workflow structure:
 
 These visual representations help understand the flow of data and the relationships between different components in the automation system.
 
+### **📥 Download N8N Workflows**
+
+You can download the complete workflow files to import directly into your N8N instance:
+
+#### **� Workflow Files**
+
+| Workflow            | Description                                                        | Download Link                                                                  |
+| ------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| 🤖 **TodoAI Main**  | Complete WhatsApp integration with task management CRUD operations | [📄 Download todoai.json](./public/assets/workflows/todoai.json)               |
+| 🔍 **Search Agent** | Internet search functionality for enhanced AI responses            | [📄 Download Search agent.json](./public/assets/workflows/Search%20agent.json) |
+
+#### **📋 Quick Import Guide**
+
+1. **📂 Download** the workflow files using the links above
+2. **🔧 Open N8N** → Navigate to **Workflows** → **Import from File**
+3. **📤 Upload** the downloaded JSON file
+4. **🔑 Configure credentials** (Supabase, OpenAI, Evolution API, Tavily)
+5. **✅ Activate** the workflow
+
+#### **⚡ Quick Start Tips**
+
+- 🔗 **Start with TodoAI workflow** for main functionality
+- 🔍 **Add Search Agent** for enhanced search capabilities
+- 📱 **Test with WhatsApp** before going live
+- 🔐 **Secure your credentials** in N8N settings
+
+> **⚠️ Important**: Before activating the workflows, ensure you have configured all the required credentials and API keys as described in the Environment Setup section.
+
 ## 📁 Project Structure
 
 ```
@@ -174,7 +203,10 @@ todo-ia/
 ├── public/                       # Static files
 │   ├── assets/                   # Images and visual resources
 │   │   ├── todoai-agent.png      # TodoAI N8N workflow diagram
-│   │   └── search-agent.png      # Search Agent N8N workflow diagram
+│   │   ├── search-agent.png      # Search Agent N8N workflow diagram
+│   │   └── workflows/            # N8N workflow files for download
+│   │       ├── todoai.json       # Main TodoAI workflow
+│   │       └── Search agent.json # Search Agent workflow
 │   └── *.svg                     # Other static assets
 ├── package.json                  # Dependencies and scripts
 ├── tsconfig.json                 # TypeScript configuration
@@ -350,9 +382,10 @@ If you want to enable WhatsApp integration, you'll need to set up the N8N workfl
 
 #### **Import Workflows:**
 
-1. Import the `todoai.json` workflow into your N8N instance
-2. Import the `Search agent.json` workflow into your N8N instance
-3. Configure the credentials for:
+1. **Download the workflow files** from the links provided in the "Download N8N Workflows" section above
+2. Import the `todoai.json` workflow into your N8N instance
+3. Import the `Search agent.json` workflow into your N8N instance
+4. Configure the credentials for:
    - Supabase API (same as your main app)
    - OpenAI API (same as your main app)
    - Evolution API (for WhatsApp)
@@ -608,6 +641,42 @@ If AI is not available:
 - Use toggle to disable
 - System will work normally without enhancement
 - Manual descriptions continue working
+
+### **Problem: N8N Workflows not working**
+
+1. **Check workflow import:**
+
+   - Ensure workflows were imported correctly
+   - Verify all nodes are connected properly
+   - Check for any error indicators on nodes
+
+2. **Verify credentials:**
+
+   ```bash
+   # Required credentials in N8N:
+   - Supabase API (URL + Service Key)
+   - OpenAI API (API Key)
+   - Evolution API (Instance + API Key)
+   - Tavily Search API (API Key)
+   - PostgreSQL (Host, Database, User, Password)
+   ```
+
+3. **Test webhook connectivity:**
+
+   - Copy webhook URL from TodoAI workflow
+   - Test with a simple POST request
+   - Check N8N execution logs
+
+4. **WhatsApp integration issues:**
+
+   - Verify Evolution API instance is running
+   - Check WhatsApp number is properly connected
+   - Ensure webhook URL is configured in Evolution API settings
+
+5. **Database connection problems:**
+   - Test Supabase connection in N8N
+   - Verify RLS policies allow workflow access
+   - Check user_id is correctly passed to database operations
 
 ## 🤝 Contributing
 

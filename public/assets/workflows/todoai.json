@@ -1,0 +1,575 @@
+{
+  "name": "todoai",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "chat",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        224,
+        -16
+      ],
+      "id": "679312fd-df3c-4353-a742-fc6c82115c86",
+      "name": "Webhook",
+      "webhookId": "8b6d606b-1df2-4d85-a6e4-82914a282a31"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "887db83f-1c6f-4392-804f-f8065b70b5ae",
+              "name": "From",
+              "value": "={{ $json.body.data.key.remoteJid }}",
+              "type": "string"
+            },
+            {
+              "id": "31a70f05-e9fe-4d5a-bc67-bbef8b7e6def",
+              "name": "Instance",
+              "value": "={{ $json.body.instance }}",
+              "type": "string"
+            },
+            {
+              "id": "7e5eb891-b4a3-4067-97e8-15df458f8c89",
+              "name": "Message",
+              "value": "={{ $json.body.data.message.conversation || $json.body.data.message.ephemeralMessage.message.extendedTextMessage.text }}",
+              "type": "string"
+            },
+            {
+              "id": "1c6aff83-ae5b-411b-bd4a-e5995a820383",
+              "name": "=MessageId",
+              "value": "={{ $json.body.data.key.id }}",
+              "type": "string"
+            },
+            {
+              "id": "b7d7edcf-2b85-4912-b8ef-5b99dca8e9cb",
+              "name": "user_id",
+              "value": "aad6b6e8-1521-444e-aece-fefb25f01553",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        -16
+      ],
+      "id": "f7dd3c98-0963-4ead-987d-e357511d412d",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.Message }}",
+        "options": {
+          "systemMessage": "=# Task List Agent\n\nYou are an assistant connected to WhatsApp responsible for **managing the user's task list**.  \nYour goal is to always respond to the user in a **clear, helpful, and friendly** way, ensuring they can easily create, update, view, and delete their tasks.  \n\n## Information:\n\n- Today's date is: {{ $now.format('yyyy-MM-dd') }}\n\n## General Rules\n1. Always respond to the user — never leave a message unanswered.  \n2. Use natural, short, and objective language, adapted to the WhatsApp context.  \n3. Confirm each operation performed (e.g., \"Task created successfully ✅\").  \n4. If in doubt, ask the user for more details.  \n5. Whenever possible, offer clear instructions for the next step.  \n6. If the user **asks general questions** (e.g., \"What tasks do I have today?\", \"What’s left to do?\", \"List my tasks\"), check the **registered task data** and respond clearly.  \n7. If the user says \"this task\", \"the last task\", or uses an indirect reference, assume they are referring to the **last task mentioned in the conversation** and execute the corresponding action (Update or Delete), confirming with them.  \n8. If the user adds more details about an already mentioned task (e.g., \"I need to buy bricks and cement for the construction\" after saying \"buy construction materials\"), **do not create separate new tasks**. Instead, **group all items into a single task with a detailed description**.  \n   - Example:  \n     - First message: \"I need to buy construction materials for the house renovation\"  \n       → Create task: **\"Buy construction materials for house renovation\"**  \n     - Later: \"I need to buy bricks and cement for the construction\"  \n       → Update existing task to: **\"Buy construction materials (bricks and cement) for house renovation\"**  \n\n## Available Tools\n- **Create** → Use to add a new task to the database.  \n- **Update** → Use to update an existing task (by id).  \n- **Delete** → Use to delete an existing task (by id or name).  \n- **Read** → Use to list, search, or check the user’s tasks.  \n- **Search** → Use to search the internet when necessary or when the user asks something unrelated to the task list.  \n\n## Examples of User Commands\n- \"Add a task: Buy bread.\" → Use **Create**.  \n- \"Mark the task 'Buy bread' as completed.\" → Use **Update**.  \n- \"Remove task 3.\" → Use **Delete**.  \n- \"Delete the task 'Buy bread'.\" → Use **Delete**.  \n- \"What are my tasks?\" → Use **Read**.  \n- \"List today’s tasks.\" → Use **Read**.  \n- \"I need to buy bricks and cement for the construction.\" → Update the description of an existing task (do not create two separate ones).  \n\n## Response Style\n- Always friendly and direct.  \n- Confirm the operation after executing it.  \n\n### Examples:\n- **Creating a new task**  \n  - User: \"Add a task: Study n8n.\"  \n  - Assistant: Executes Create.  \n  - Assistant: \"Done! ✅ The task *Study n8n* has been added to your list.\"  \n\n- **Task query**  \n  - User: \"What tasks do I have today?\"  \n  - Assistant: Executes Read.  \n  - Assistant: \"Here are your tasks for today ({{ $now.format('yyyy-MM-dd') }}):  \n     1. Buy bread 🥖  \n     2. Study n8n 📘\"  \n\n- **Grouping information into a task**  \n  - User: \"I need to buy construction materials for the house renovation.\"  \n  - Assistant: Executes Create → *\"Buy construction materials for house renovation\"*.  \n  - User: \"I also need to buy bricks and cement for the construction.\"  \n  - Assistant: Executes Update → *\"Buy construction materials (bricks and cement) for house renovation\"*.  \n  - Assistant: \"Perfect! ✅ I’ve updated the task to include the details: *Buy construction materials (bricks and cement) for house renovation*.\"  \n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        752,
+        -128
+      ],
+      "id": "813370b7-e6de-4e58-9d6f-99aca7222b03",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Get many rows in Supabase",
+        "useCustomSchema": true,
+        "operation": "getAll",
+        "tableId": "todos",
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}"
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        1152,
+        144
+      ],
+      "id": "d13b09ae-72b5-466c-a6e4-aa62da64ce60",
+      "name": "Read",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ApqmJ9oLD4mjXZpy",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Create a row in Supabase",
+        "tableId": "todos",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "user_id",
+              "fieldValue": "={{ $('Edit Fields').item.json.user_id }}"
+            },
+            {
+              "fieldId": "task",
+              "fieldValue": "={{ $fromAI('task', `title of the task`, 'string') }}"
+            },
+            {
+              "fieldId": "is_complete",
+              "fieldValue": "={{ $fromAI('is_complete', `if the task is completed or not`, 'boolean') }}"
+            },
+            {
+              "fieldId": "description",
+              "fieldValue": "={{ $fromAI('description', `A short description of the task`, 'string') }}"
+            },
+            {
+              "fieldId": "inserted_at",
+              "fieldValue": "={{ $now.format('yyyy-MM-dd') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        144
+      ],
+      "id": "5ea0208f-9226-4009-908d-41f34c506a89",
+      "name": "Create",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ApqmJ9oLD4mjXZpy",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Update a row in Supabase",
+        "operation": "update",
+        "tableId": "todos",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $fromAI('id', `id of the task to be updated`, 'string') }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "task",
+              "fieldValue": "={{ $fromAI('task', `name of the task to be updated`, 'string') }}"
+            },
+            {
+              "fieldId": "is_complete",
+              "fieldValue": "={{ $fromAI('is_complete', `state of the task to be updated`, 'boolean') }}"
+            },
+            {
+              "fieldId": "description",
+              "fieldValue": "={{ $fromAI('description', `description of the task to be updated`, 'string') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        1248,
+        144
+      ],
+      "id": "ff976f91-f6d5-4bc5-be4e-fa4b46ecb801",
+      "name": "Update",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ApqmJ9oLD4mjXZpy",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        624,
+        80
+      ],
+      "id": "68d77579-4140-4f14-8ebe-5d77028172bb",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "tkl5QduqNOiC9o6h",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Edit Fields').item.json.user_id }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        768,
+        80
+      ],
+      "id": "c10b95cf-266f-4ad8-bac6-1b8ba6aef5b8",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "xU3S4JtGY62maleS",
+          "name": "Postgres account / Supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Delete a row in Supabase",
+        "operation": "delete",
+        "tableId": "todos",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $fromAI('id', `id of the task to be updated`, 'string') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        144
+      ],
+      "id": "a7f9b814-0c6e-4725-ae41-f2a8a9dbbed7",
+      "name": "Delete",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ApqmJ9oLD4mjXZpy",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1536,
+        64
+      ],
+      "id": "0e860c59-8169-4181-bb2b-db1a1e5f648e",
+      "name": "Respond to Chat"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "01fcb875-1621-447e-b19b-eb4db209609a",
+              "leftValue": "={{ $('Edit Fields').item.json.From }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        -128
+      ],
+      "id": "6f167fcd-51fd-4c03-99d0-7bfdf43d3791",
+      "name": "If from Whatsapp"
+    },
+    {
+      "parameters": {
+        "description": "Call this tool when you need to search for something on the internet about the requested term.",
+        "workflowId": {
+          "__rl": true,
+          "value": "aYHkWpNZEkuREAs8",
+          "mode": "list",
+          "cachedResultName": "Search"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "search": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('search', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "search"
+          ],
+          "schema": [
+            {
+              "id": "search",
+              "displayName": "search",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        912,
+        144
+      ],
+      "id": "23849a5c-70e7-4536-966d-0a1835a10b72",
+      "name": "Search"
+    },
+    {
+      "parameters": {
+        "resource": "chat-api",
+        "operation": "read-messages",
+        "instanceName": "={{ $('Edit Fields').item.json.Instance }}",
+        "remoteJid": "={{ $('Edit Fields').item.json.From }}",
+        "messageId": "={{ $('Edit Fields').item.json.MessageId }}"
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        1520,
+        -144
+      ],
+      "id": "b872c8b6-f3fd-4923-83bb-d48f2899374a",
+      "name": "Mark messages as read",
+      "credentials": {
+        "evolutionApi": {
+          "id": "CyXmyz0mXlv9dUh1",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "={{ $('Edit Fields').item.json.Instance }}",
+        "remoteJid": "={{ $('Edit Fields').item.json.From }}",
+        "messageText": "={{ $('AI Agent').item.json.output }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        1760,
+        -144
+      ],
+      "id": "90dbef2e-1ea1-41a4-913d-f0329bffe16b",
+      "name": "Send message",
+      "credentials": {
+        "evolutionApi": {
+          "id": "CyXmyz0mXlv9dUh1",
+          "name": "Evolution account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "If from Whatsapp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If from Whatsapp": {
+      "main": [
+        [
+          {
+            "node": "Mark messages as read",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Chat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark messages as read": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Sao_Paulo",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "e751b5b3-3270-4f8f-878e-bfcde386d749",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9ac6bca7b4bce5dc8d15de689b3a41537b6d6d9b8a2830275338605f635aed9d"
+  },
+  "id": "wXHntLeDMknW6tzB",
+  "tags": []
+}
